@@ -351,8 +351,8 @@ public class ValidatorTests6_RootLevel_ForkJoin extends AbstractValidatorTests {
 				Diagnostic.ERROR);
 		assertDiagnostic("Incorrect sub-diagnostics", diagnostic,
 				new Error_ForkJoinNeitherForkingNorJoining(fork),
-				new Warning_TransitionMissingElaboration(outgoingTransition)
-		// new Warning_TransitionMissingElaboration(transition)
+				new Warning_TransitionMissingElaboration(outgoingTransition),
+				new Warning_TransitionMissingElaboration(fork.getIncoming().get(0))
 		);
 	}
 

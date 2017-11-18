@@ -281,7 +281,9 @@ public class ValidatorTests4_RootLevel_Any extends AbstractValidatorTests {
 		assertDiagnosticSeverity("Incorrect root diagnostic", diagnostic,
 				Diagnostic.ERROR);
 		assertDiagnostic("Incorrect sub-diagnostics", diagnostic,
-				new Error_TransitionTargetAnyState(transition));
+				new Error_TransitionTargetAnyState(transition),
+				new Warning_TransitionMissingElaboration(transition)
+				);
 	}
 
 	/**
