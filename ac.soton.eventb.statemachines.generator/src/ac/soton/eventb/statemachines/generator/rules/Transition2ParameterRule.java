@@ -3,14 +3,14 @@ package ac.soton.eventb.statemachines.generator.rules;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eventb.emf.core.EventBElement;
+import org.eclipse.emf.ecore.EObject;
 import org.eventb.emf.core.machine.Event;
 import org.eventb.emf.core.machine.Parameter;
 
-import ac.soton.eventb.emf.diagrams.generator.AbstractRule;
-import ac.soton.eventb.emf.diagrams.generator.GenerationDescriptor;
-import ac.soton.eventb.emf.diagrams.generator.IRule;
-import ac.soton.eventb.emf.diagrams.generator.utils.Make;
+import ac.soton.emf.translator.TranslationDescriptor;
+import ac.soton.emf.translator.configuration.IRule;
+import ac.soton.emf.translator.eventb.rules.AbstractEventBGeneratorRule;
+import ac.soton.emf.translator.eventb.utils.Make;
 import ac.soton.eventb.statemachines.Statemachine;
 import ac.soton.eventb.statemachines.Transition;
 import ac.soton.eventb.statemachines.generator.strings.Strings;
@@ -23,7 +23,7 @@ import ac.soton.eventb.statemachines.generator.utils.Utils;
  *
  */
 
-public class Transition2ParameterRule extends AbstractRule  implements IRule {
+public class Transition2ParameterRule extends AbstractEventBGeneratorRule  implements IRule {
 	
 	/**
 	 * Trasition2Parameters
@@ -31,8 +31,8 @@ public class Transition2ParameterRule extends AbstractRule  implements IRule {
 	 * Generates the parameter for events elaborated by the transition
 	 */
 	@Override
-	public List<GenerationDescriptor> fire(EventBElement sourceElement, List<GenerationDescriptor> generatedElements) throws Exception {
-		List<GenerationDescriptor> ret = new ArrayList<GenerationDescriptor>();
+	public List<TranslationDescriptor> fire(EObject sourceElement, List<TranslationDescriptor> generatedElements) throws Exception {
+		List<TranslationDescriptor> ret = new ArrayList<TranslationDescriptor>();
 	
 		Transition sourceTransition = (Transition) sourceElement;
 		

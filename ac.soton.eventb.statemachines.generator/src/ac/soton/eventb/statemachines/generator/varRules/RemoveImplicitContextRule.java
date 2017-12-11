@@ -3,24 +3,24 @@ package ac.soton.eventb.statemachines.generator.varRules;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eventb.emf.core.EventBElement;
 import org.eventb.emf.core.EventBNamedCommentedComponentElement;
 import org.eventb.emf.core.context.Context;
 import org.eventb.emf.core.machine.Machine;
 
-import ac.soton.eventb.emf.diagrams.generator.AbstractRule;
-import ac.soton.eventb.emf.diagrams.generator.GenerationDescriptor;
-import ac.soton.eventb.emf.diagrams.generator.IRule;
+import ac.soton.emf.translator.TranslationDescriptor;
+import ac.soton.emf.translator.configuration.IRule;
+import ac.soton.emf.translator.eventb.rules.AbstractEventBGeneratorRule;
 import ac.soton.eventb.statemachines.Statemachine;
 import ac.soton.eventb.statemachines.TranslationKind;
 import ac.soton.eventb.statemachines.generator.strings.Strings;
 import ac.soton.eventb.statemachines.generator.utils.Utils;
 
-public class RemoveImplicitContextRule extends AbstractRule  implements IRule {
+public class RemoveImplicitContextRule extends AbstractEventBGeneratorRule  implements IRule {
 
 	@Override
-	public boolean enabled(EventBElement sourceElement) throws Exception{
+	public boolean enabled(EObject sourceElement) throws Exception{
 		Statemachine sm = (Statemachine) sourceElement;
 		
 		return Utils.isRootStatemachine(sm) &&
@@ -31,8 +31,8 @@ public class RemoveImplicitContextRule extends AbstractRule  implements IRule {
 	
 
 	@Override
-	public List<GenerationDescriptor> fire(EventBElement sourceElement, List<GenerationDescriptor> generatedElements) throws Exception {
-		List<GenerationDescriptor> ret = new ArrayList<GenerationDescriptor>();
+	public List<TranslationDescriptor> fire(EObject sourceElement, List<TranslationDescriptor> generatedElements) throws Exception {
+		List<TranslationDescriptor> ret = new ArrayList<TranslationDescriptor>();
 		EventBNamedCommentedComponentElement container = (EventBNamedCommentedComponentElement)EcoreUtil.getRootContainer(sourceElement);
 		
 		if(((Machine)container).getSees().size() != 0){

@@ -5,14 +5,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eventb.emf.core.EventBElement;
+import org.eclipse.emf.ecore.EObject;
 import org.eventb.emf.core.machine.Action;
 import org.eventb.emf.core.machine.Event;
 
-import ac.soton.eventb.emf.diagrams.generator.AbstractRule;
-import ac.soton.eventb.emf.diagrams.generator.GenerationDescriptor;
-import ac.soton.eventb.emf.diagrams.generator.IRule;
-import ac.soton.eventb.emf.diagrams.generator.utils.Make;
+import ac.soton.emf.translator.TranslationDescriptor;
+import ac.soton.emf.translator.configuration.IRule;
+import ac.soton.emf.translator.eventb.rules.AbstractEventBGeneratorRule;
+import ac.soton.emf.translator.eventb.utils.Make;
 import ac.soton.eventb.statemachines.AbstractNode;
 import ac.soton.eventb.statemachines.Fork;
 import ac.soton.eventb.statemachines.State;
@@ -22,7 +22,7 @@ import ac.soton.eventb.statemachines.TranslationKind;
 import ac.soton.eventb.statemachines.generator.strings.Strings;
 import ac.soton.eventb.statemachines.generator.utils.Utils;
 
-public class Transition2InitActionsActiveRule extends AbstractRule  implements IRule {
+public class Transition2InitActionsActiveRule extends AbstractEventBGeneratorRule  implements IRule {
 
 	
 	/**
@@ -38,7 +38,7 @@ public class Transition2InitActionsActiveRule extends AbstractRule  implements I
 	 * Transformation only for the the transition that elaborates init
 	 */
 	@Override
-	public boolean enabled(EventBElement sourceElement) throws Exception{
+	public boolean enabled(EObject sourceElement) throws Exception{
 		Transition sourceTransition = (Transition) sourceElement;
 
 		for(Event e : sourceTransition.getElaborates()){
@@ -52,9 +52,9 @@ public class Transition2InitActionsActiveRule extends AbstractRule  implements I
 	/**
 	 */
 	@Override
-	public List<GenerationDescriptor> fire(EventBElement sourceElement, List<GenerationDescriptor> generatedElements) throws Exception {
+	public List<TranslationDescriptor> fire(EObject sourceElement, List<TranslationDescriptor> generatedElements) throws Exception {
 
-		List<GenerationDescriptor> ret = new ArrayList<GenerationDescriptor>();
+		List<TranslationDescriptor> ret = new ArrayList<TranslationDescriptor>();
 		List<Action> generatedActions = new ArrayList<Action>();
 		Transition sourceTransition = (Transition) sourceElement;
 		

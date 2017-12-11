@@ -3,14 +3,14 @@ package ac.soton.eventb.statemachines.generator.rules;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eventb.emf.core.EventBElement;
+import org.eclipse.emf.ecore.EObject;
 import org.eventb.emf.core.machine.Event;
 import org.eventb.emf.core.machine.Guard;
 
-import ac.soton.eventb.emf.diagrams.generator.AbstractRule;
-import ac.soton.eventb.emf.diagrams.generator.GenerationDescriptor;
-import ac.soton.eventb.emf.diagrams.generator.IRule;
-import ac.soton.eventb.emf.diagrams.generator.utils.Make;
+import ac.soton.emf.translator.TranslationDescriptor;
+import ac.soton.emf.translator.configuration.IRule;
+import ac.soton.emf.translator.eventb.rules.AbstractEventBGeneratorRule;
+import ac.soton.emf.translator.eventb.utils.Make;
 import ac.soton.eventb.statemachines.Initial;
 import ac.soton.eventb.statemachines.Statemachine;
 import ac.soton.eventb.statemachines.Transition;
@@ -18,7 +18,7 @@ import ac.soton.eventb.statemachines.TranslationKind;
 import ac.soton.eventb.statemachines.generator.strings.Strings;
 import ac.soton.eventb.statemachines.generator.utils.Utils;
 
-public class InitialTransition2SourceGuardRule extends AbstractRule  implements IRule {
+public class InitialTransition2SourceGuardRule extends AbstractEventBGeneratorRule  implements IRule {
 
 
 	private Statemachine rootSM;
@@ -30,7 +30,7 @@ public class InitialTransition2SourceGuardRule extends AbstractRule  implements 
 	 * Skips the transformation if every event elaborated by the transition already contaisn the guard
 	 */
 	@Override
-	public boolean enabled(EventBElement sourceElement) throws Exception{
+	public boolean enabled(EObject sourceElement) throws Exception{
 		Transition sourceTransition = (Transition) sourceElement;
 		return 
 				(sourceTransition.getSource() instanceof Initial) &&
@@ -46,8 +46,8 @@ public class InitialTransition2SourceGuardRule extends AbstractRule  implements 
 	 * Transforms transition with a Initial as source to a guard for events it elaborates other than Init
 	 */
 	@Override
-	public List<GenerationDescriptor> fire(EventBElement sourceElement, List<GenerationDescriptor> generatedElements) throws Exception {
-		List<GenerationDescriptor> ret = new ArrayList<GenerationDescriptor>();
+	public List<TranslationDescriptor> fire(EObject sourceElement, List<TranslationDescriptor> generatedElements) throws Exception {
+		List<TranslationDescriptor> ret = new ArrayList<TranslationDescriptor>();
 
 		Transition sourceTransition = (Transition) sourceElement;
 		rootSM = Utils.getRootStatemachine(sourceTransition.getSource());
