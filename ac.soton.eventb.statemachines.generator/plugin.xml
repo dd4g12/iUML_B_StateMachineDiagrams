@@ -43,7 +43,7 @@
    <extension
          point="ac.soton.emf.translators">
       <translator
-            adapter_class="ac.soton.emf.translator.eventb.adapter.EventBTranslatorAdapter"
+            adapter_class="ac.soton.eventb.emf.diagrams.generator.adapter.IUMLBTranslatorAdapter"
             command_id="ac.soton.eventb.emf.diagrams.generator.translateToEventB"
             name="State-machine Diagram Generator"
             root_source_class="Statemachine"
