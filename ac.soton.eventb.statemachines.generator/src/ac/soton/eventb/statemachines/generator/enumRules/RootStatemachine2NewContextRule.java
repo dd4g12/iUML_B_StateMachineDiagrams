@@ -3,17 +3,14 @@ package ac.soton.eventb.statemachines.generator.enumRules;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eventb.emf.core.context.Context;
 import org.eventb.emf.core.machine.Machine;
 
-import ac.soton.emf.translator.eventb.rules.AbstractEventBGeneratorRule;
 import ac.soton.emf.translator.TranslationDescriptor;
 import ac.soton.emf.translator.configuration.IRule;
+import ac.soton.emf.translator.eventb.rules.AbstractEventBGeneratorRule;
 import ac.soton.emf.translator.eventb.utils.Find;
 import ac.soton.emf.translator.eventb.utils.Make;
 import ac.soton.eventb.statemachines.Statemachine;
@@ -44,53 +41,39 @@ public class RootStatemachine2NewContextRule extends AbstractEventBGeneratorRule
 
 		List<TranslationDescriptor> ret = new ArrayList<TranslationDescriptor>();
 	
-		Context ctx =  (Context) Make.context(container.getName() + Strings._IMPLICIT_CONTEXT, "");
-		if(!hasImplicitContext(container)){
-			ret.add(Make.descriptor(Find.project(container), components,ctx ,1));
-			ret.add(Make.descriptor(container, seesNames, ctx.getName(), 1));
-		}
-		else if(!container.getSeesNames().contains(Strings.CTX_NAME(container))){
-			container.getSeesNames().add(Strings.CTX_NAME(container));
-		}
-		if(container.getRefines().size() != 0){
-			List<Context> abstractCtxs = getGeneratedAbstractContext(container);
+		Context implicitContext =  (Context) Make.context(container.getName() + Strings._IMPLICIT_CONTEXT, "");
+		
+		ret.add(Make.descriptor(Find.project(container), components,implicitContext ,1));
+		ret.add(Make.descriptor(container, seesNames, implicitContext.getName(), 1));
 
-			for(Context ictx : abstractCtxs)
-				if(!ctx.getExtendsNames().contains(ictx.getName()))
-					ctx.getExtendsNames().add(ictx.getName());
+		for(Context abstractContext : getGeneratedAbstractContext(container)){
+			if(!implicitContext.getExtendsNames().contains(abstractContext.getName())){
+				implicitContext.getExtendsNames().add(abstractContext.getName());
+			}
 		}
 
 		return ret;
 
 	}
-	
-	private boolean hasImplicitContext(Machine m){
-		IProject project = getProject(m);
-		return project.exists() && project.getFile(m.getName() + Strings._IMPLICIT_CONTEXT + ".buc").exists();
-	}
-	
-	private IProject getProject(Machine m){
-		URI uri = EcoreUtil.getURI(m);
-		return ResourcesPlugin.getWorkspace().getRoot().getProject(uri.segment(1).toString());	
-	}
 
-	
-	private List<Context> getGeneratedAbstractContext(Machine mac){
+	/**
+	 * this returns the abstract seen implicit contexts
+	 * i.e. those that are named in the way we name implicit contexts
+	 * @param machine
+	 * @return
+	 */
+	//TODO:  
+	private List<Context> getGeneratedAbstractContext(Machine machine){
 		List<Context> abstractCtxs = new ArrayList<Context>();
-		for(Machine imac : mac.getRefines()){
-			for(Context ctx : imac.getSees()){
-				if(ctx.getName().equals(imac.getName() + Strings._IMPLICIT_CONTEXT)){
+		for(Machine abstractMachine : machine.getRefines()){
+			for(Context ctx : abstractMachine.getSees()){
+				if(ctx.getName().equals(abstractMachine.getName() + Strings._IMPLICIT_CONTEXT)){
 					abstractCtxs.add(ctx);
 				}
 			}
-
 		}
 		return abstractCtxs;
 	}
-	
-	
-	
-	
 	
 }
 
