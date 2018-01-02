@@ -47,7 +47,6 @@
             command_id="ac.soton.eventb.emf.diagrams.generator.translateToEventB"
             name="State-machine Diagram Generator"
             root_source_class="Statemachine"
-            self_modifiying="true"
             source_package="http://soton.ac.uk/models/eventb/statemachines/2014"
             translator_id="ac.soton.eventb.statemachines.generator">
       </translator>
