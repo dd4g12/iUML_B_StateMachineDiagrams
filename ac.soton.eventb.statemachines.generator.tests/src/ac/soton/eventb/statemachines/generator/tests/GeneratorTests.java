@@ -30,6 +30,7 @@ import org.rodinp.core.IRodinFile;
 import org.rodinp.core.RodinDBException;
 
 import ac.soton.emf.translator.TranslatorFactory;
+import ac.soton.eventb.emf.diagrams.generator.DiagramsGeneratorIdentifiers;
 import ac.soton.eventb.statemachines.Initial;
 import ac.soton.eventb.statemachines.State;
 import ac.soton.eventb.statemachines.Statemachine;
@@ -74,7 +75,7 @@ public class GeneratorTests extends AbstractEventBEMFTests {
 		m0_init = EventBEMFUtils.createEvent(domain, m0, IEvent.INITIALISATION);
 		EventBEMFUtils.save(emfRodinDB, m0);
 		factory = TranslatorFactory.getFactory();
-		commandID = "ac.soton.eventb.emf.diagrams.generator.translateToEventB";
+		commandID = DiagramsGeneratorIdentifiers.COMMAND_ID;
 	}
 
 	@Test
