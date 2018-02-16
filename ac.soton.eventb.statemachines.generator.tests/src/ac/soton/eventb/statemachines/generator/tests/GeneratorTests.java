@@ -23,12 +23,14 @@ import org.eventb.emf.core.machine.Event;
 import org.eventb.emf.core.machine.Machine;
 import org.eventb.emf.persistence.EMFRodinDB;
 import org.eventb.emf.persistence.EventBEMFUtils;
+import org.eventb.emf.persistence.SaveResourcesCommand;
 import org.eventb.emf.persistence.tests.AbstractEventBEMFTests;
 import org.junit.Test;
 import org.rodinp.core.IRodinFile;
 import org.rodinp.core.RodinDBException;
 
-import ac.soton.eventb.emf.diagrams.generator.command.GenerateCommand;
+import ac.soton.emf.translator.TranslatorFactory;
+import ac.soton.eventb.emf.diagrams.generator.DiagramsGeneratorIdentifiers;
 import ac.soton.eventb.statemachines.Initial;
 import ac.soton.eventb.statemachines.State;
 import ac.soton.eventb.statemachines.Statemachine;
@@ -55,6 +57,9 @@ public class GeneratorTests extends AbstractEventBEMFTests {
 
 	private Event m0_init;
 
+	private TranslatorFactory factory;
+	
+	private String commandID;
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -69,6 +74,8 @@ public class GeneratorTests extends AbstractEventBEMFTests {
 		TransactionalEditingDomain domain = emfRodinDB.getEditingDomain();
 		m0_init = EventBEMFUtils.createEvent(domain, m0, IEvent.INITIALISATION);
 		EventBEMFUtils.save(emfRodinDB, m0);
+		factory = TranslatorFactory.getFactory();
+		commandID = DiagramsGeneratorIdentifiers.COMMAND_ID;
 	}
 
 	@Test
@@ -83,15 +90,18 @@ public class GeneratorTests extends AbstractEventBEMFTests {
 				initialState, s0);
 		StatemachinesUtils.addElaboration(domain, transition, m0_init);
 		EventBEMFUtils.save(emfRodinDB, m0);
-
-		GenerateCommand generateCommand = new GenerateCommand(domain, SM);
-		assertTrue("Generate command must be executable",
-				generateCommand.canExecute());
+		
+		assertTrue("Factory must be able to translate the statemachine",
+				factory.canTranslate(commandID, SM.eClass()));
 		try {
-			IStatus status = generateCommand.execute(new NullProgressMonitor(),
-					null);
+			IStatus status = factory.translate(domain, SM, commandID, new NullProgressMonitor());
 			assertTrue("The status should be OK", status.isOK());
 
+			SaveResourcesCommand saveCommand = new SaveResourcesCommand(domain);
+			assertTrue("Save command must be able to execute",
+					saveCommand.canExecute());
+			saveCommand.execute(null, null);
+			
 			// Test the generated context.
 			IRodinFile contextFile = prj.getContextFile("m0_implicitContext");
 			assertTrue("Context should exist", contextFile.exists());
@@ -143,14 +153,17 @@ public class GeneratorTests extends AbstractEventBEMFTests {
 		StatemachinesUtils.addElaboration(domain, transition, m0_init);
 		EventBEMFUtils.save(emfRodinDB, m0);
 
-		GenerateCommand generateCommand = new GenerateCommand(domain, SM);
-		assertTrue("Generate command must be executable",
-				generateCommand.canExecute());
+		assertTrue("Factory must be able to translate the statemachine",
+				factory.canTranslate(commandID, SM.eClass()));
 		try {
-			IStatus status = generateCommand.execute(new NullProgressMonitor(),
-					null);
+			IStatus status = factory.translate(domain, SM, commandID, new NullProgressMonitor());
 			assertTrue("The status should be OK", status.isOK());
-
+			
+			SaveResourcesCommand saveCommand = new SaveResourcesCommand(domain);
+			assertTrue("Save command must be able to execute",
+					saveCommand.canExecute());
+			saveCommand.execute(null, null);
+			
 			// There should not be any generated context.
 			IRodinFile contextFile = prj.getContextFile("m0_implicitContext");
 			assertFalse("Context should not exist", contextFile.exists());
@@ -200,17 +213,20 @@ public class GeneratorTests extends AbstractEventBEMFTests {
 		StatemachinesUtils.addElaboration(domain, transition, m0_init);
 		EventBEMFUtils.save(emfRodinDB, m0);
 
-		GenerateCommand generateCommand = new GenerateCommand(domain, SM);
-		assertTrue("Generate command must be executable",
-				generateCommand.canExecute());
+		assertTrue("Factory must be able to translate the statemachine",
+				factory.canTranslate(commandID, SM.eClass()));
 		try {
-			IStatus status = generateCommand.execute(new NullProgressMonitor(),
-					null);
+			IStatus status = factory.translate(domain, SM, commandID, new NullProgressMonitor());
 			assertTrue("The status should be OK", status.isOK());
 
+			SaveResourcesCommand saveCommand = new SaveResourcesCommand(domain);
+			assertTrue("Save command must be able to execute",
+					saveCommand.canExecute());
+			saveCommand.execute(null, null);
+			
 			// Test the generated context.
 			IRodinFile contextFile = prj.getContextFile("m0_implicitContext");
-			assertTrue("Context should not exist", contextFile.exists());
+			assertTrue("Context should exist", contextFile.exists());
 			Context m0ImplicitContext = (Context) emfRodinDB
 					.loadElement(contextFile.getRoot());
 			testContextExtendsClauses(
@@ -228,7 +244,7 @@ public class GeneratorTests extends AbstractEventBEMFTests {
 			// Test the generated machine.
 			testMachineRefinesClauses("m0 should not refine any machines", m0);
 			testMachineSeesClauses("Incorrect m0's sees contexts", m0,
-					"m0_implicitContext", "c0");
+					"c0","m0_implicitContext");
 			testMachineVariables("Incorrect m0's variables", m0, "SM");
 			testMachineInvariants("Incorrect m0's invariants", m0,
 					"typeof_SM:SM ∈ INSTANCE → SM_STATES:false");
@@ -271,14 +287,17 @@ public class GeneratorTests extends AbstractEventBEMFTests {
 		StatemachinesUtils.addElaboration(domain, transition, m0_init);
 		EventBEMFUtils.save(emfRodinDB, m0);
 
-		GenerateCommand generateCommand = new GenerateCommand(domain, SM);
-		assertTrue("Generate command must be executable",
-				generateCommand.canExecute());
+		assertTrue("Factory must be able to translate the statemachine",
+				factory.canTranslate(commandID, SM.eClass()));
 		try {
-			IStatus status = generateCommand.execute(new NullProgressMonitor(),
-					null);
+			IStatus status = factory.translate(domain, SM, commandID, new NullProgressMonitor());
 			assertTrue("The status should be OK", status.isOK());
 
+			SaveResourcesCommand saveCommand = new SaveResourcesCommand(domain);
+			assertTrue("Save command must be able to execute",
+					saveCommand.canExecute());
+			saveCommand.execute(null, null);
+			
 			// There should not be any generated context.
 			IRodinFile contextFile = prj.getContextFile("m0_implicitContext");
 			assertFalse("Context should not exist", contextFile.exists());
@@ -598,14 +617,17 @@ public class GeneratorTests extends AbstractEventBEMFTests {
 		StatemachinesUtils.addElaboration(domain, transition, m0_e);
 		EventBEMFUtils.save(emfRodinDB, m0);
 
-		GenerateCommand generateCommand = new GenerateCommand(domain, SM);
-		assertTrue("Generate command must be executable",
-				generateCommand.canExecute());
+		assertTrue("Factory must be able to translate the statemachine",
+				factory.canTranslate(commandID, SM.eClass()));
 		try {
-			IStatus status = generateCommand.execute(new NullProgressMonitor(),
-					null);
+			IStatus status = factory.translate(domain, SM, commandID, new NullProgressMonitor());
 			assertTrue("The status should be OK", status.isOK());
 
+			SaveResourcesCommand saveCommand = new SaveResourcesCommand(domain);
+			assertTrue("Save command must be able to execute",
+					saveCommand.canExecute());
+			saveCommand.execute(null, null);
+			
 			// Test the generated context.
 			IRodinFile contextFile = prj.getContextFile("m0_implicitContext");
 			assertTrue("Context should not exist", contextFile.exists());
@@ -617,10 +639,11 @@ public class GeneratorTests extends AbstractEventBEMFTests {
 			testContextCarrierSets("Incorrect m0_implictContext carrier sets",
 					m0ImplicitContext, "SM_STATES");
 			testContextConstants("Incorrect m0_implictContext constants",
-					m0ImplicitContext, "S1", "S0");
+					m0ImplicitContext, "S0", "S1");
 			testContextAxioms("Incorrect m0_implictContext's axioms",
-					m0ImplicitContext, "typeof_S1:S1 ∈ SM_STATES:false",
+					m0ImplicitContext,
 					"typeof_S0:S0 ∈ SM_STATES:false",
+					"typeof_S1:S1 ∈ SM_STATES:false",
 					"distinct_states_in_SM_STATES: partition(SM_STATES, {S0}, {S1}):false");
 
 			// Test the generated machine.
@@ -673,14 +696,17 @@ public class GeneratorTests extends AbstractEventBEMFTests {
 		StatemachinesUtils.addElaboration(domain, transition, m0_e);
 		EventBEMFUtils.save(emfRodinDB, m0);
 
-		GenerateCommand generateCommand = new GenerateCommand(domain, SM);
-		assertTrue("Generate command must be executable",
-				generateCommand.canExecute());
+		assertTrue("Factory must be able to translate the statemachine",
+				factory.canTranslate(commandID, SM.eClass()));
 		try {
-			IStatus status = generateCommand.execute(new NullProgressMonitor(),
-					null);
+			IStatus status = factory.translate(domain, SM, commandID, new NullProgressMonitor());
 			assertTrue("The status should be OK", status.isOK());
 
+			SaveResourcesCommand saveCommand = new SaveResourcesCommand(domain);
+			assertTrue("Save command must be able to execute",
+					saveCommand.canExecute());
+			saveCommand.execute(null, null);
+			
 			// There should not be any generated context.
 			IRodinFile contextFile = prj.getContextFile("m0_implicitContext");
 			assertFalse("Context should not exist", contextFile.exists());
@@ -688,9 +714,10 @@ public class GeneratorTests extends AbstractEventBEMFTests {
 			// Test the generated machine.
 			testMachineRefinesClauses("m0 should not refine any machines", m0);
 			testMachineSeesClauses("m0 should not see any contexts", m0);
-			testMachineVariables("Incorrect variables", m0, "S1", "S0");
+			testMachineVariables("Incorrect variables", m0, "S0", "S1");
 			testMachineInvariants("Incorrect m0's invariants", m0,
-					"typeof_S1:S1 ∈ BOOL:false", "typeof_S0:S0 ∈ BOOL:false",
+					"typeof_S0:S0 ∈ BOOL:false",
+					"typeof_S1:S1 ∈ BOOL:false",
 					"distinct_states_in_SM:partition({TRUE}, {S0} ∩ {TRUE}, {S1} ∩ {TRUE}):false");
 			testMachineVariants("m0 should not contain any variants", m0);
 
@@ -746,14 +773,17 @@ public class GeneratorTests extends AbstractEventBEMFTests {
 		StatemachinesUtils.addElaboration(domain, transition, m0_e);
 		EventBEMFUtils.save(emfRodinDB, m0);
 
-		GenerateCommand generateCommand = new GenerateCommand(domain, SM);
-		assertTrue("Generate command must be executable",
-				generateCommand.canExecute());
+		assertTrue("Factory must be able to translate the statemachine",
+				factory.canTranslate(commandID, SM.eClass()));
 		try {
-			IStatus status = generateCommand.execute(new NullProgressMonitor(),
-					null);
+			IStatus status = factory.translate(domain, SM, commandID, new NullProgressMonitor());
 			assertTrue("The status should be OK", status.isOK());
 
+			SaveResourcesCommand saveCommand = new SaveResourcesCommand(domain);
+			assertTrue("Save command must be able to execute",
+					saveCommand.canExecute());
+			saveCommand.execute(null, null);
+			
 			// Test the generated context.
 			IRodinFile contextFile = prj.getContextFile("m0_implicitContext");
 			assertTrue("Context should not exist", contextFile.exists());
@@ -765,17 +795,18 @@ public class GeneratorTests extends AbstractEventBEMFTests {
 			testContextCarrierSets("Incorrect m0_implictContext carrier sets",
 					m0ImplicitContext, "SM_STATES");
 			testContextConstants("Incorrect m0_implictContext constants",
-					m0ImplicitContext, "S1", "S0");
+					m0ImplicitContext, "S0", "S1");
 			testContextAxioms(
 					"m0_implictContext should not contain any axioms",
-					m0ImplicitContext, "typeof_S1:S1 ∈ SM_STATES:false",
+					m0ImplicitContext, 
 					"typeof_S0:S0 ∈ SM_STATES:false",
+					"typeof_S1:S1 ∈ SM_STATES:false",
 					"distinct_states_in_SM_STATES: partition(SM_STATES, {S0}, {S1}):false");
 
 			// Test the generated machine.
 			testMachineRefinesClauses("m0 should not refine any machines", m0);
 			testMachineSeesClauses("Incorrect m0's sees contexts", m0,
-					"m0_implicitContext", "c0");
+					"c0", "m0_implicitContext");
 			testMachineVariables("Incorrect m0's variables", m0, "SM");
 			testMachineInvariants("Incorrect m0's invariants", m0,
 					"typeof_SM:SM ∈ INSTANCE → SM_STATES:false");
@@ -832,14 +863,17 @@ public class GeneratorTests extends AbstractEventBEMFTests {
 		StatemachinesUtils.addElaboration(domain, transition, m0_e);
 		EventBEMFUtils.save(emfRodinDB, m0);
 
-		GenerateCommand generateCommand = new GenerateCommand(domain, SM);
-		assertTrue("Generate command must be executable",
-				generateCommand.canExecute());
+		assertTrue("Factory must be able to translate the statemachine",
+				factory.canTranslate(commandID, SM.eClass()));
 		try {
-			IStatus status = generateCommand.execute(new NullProgressMonitor(),
-					null);
+			IStatus status = factory.translate(domain, SM, commandID, new NullProgressMonitor());
 			assertTrue("The status should be OK", status.isOK());
 
+			SaveResourcesCommand saveCommand = new SaveResourcesCommand(domain);
+			assertTrue("Save command must be able to execute",
+					saveCommand.canExecute());
+			saveCommand.execute(null, null);
+			
 			// There should not be any generated context.
 			IRodinFile contextFile = prj.getContextFile("m0_implicitContext");
 			assertFalse("Context should not exist", contextFile.exists());
@@ -847,10 +881,10 @@ public class GeneratorTests extends AbstractEventBEMFTests {
 			// Test the generated machine.
 			testMachineRefinesClauses("m0 should not refine any machines", m0);
 			testMachineSeesClauses("Incorrect m0's sees contexts", m0, "c0");
-			testMachineVariables("Incorrect variables", m0, "S1", "S0");
+			testMachineVariables("Incorrect variables", m0, "S0", "S1");
 			testMachineInvariants("Incorrect m0's invariants", m0,
-					"typeof_S1:S1 ⊆ INSTANCE:false",
 					"typeof_S0:S0 ⊆ INSTANCE:false",
+					"typeof_S1:S1 ⊆ INSTANCE:false",
 					"distinct_states_in_SM:partition(INSTANCE, S0, S1):false");
 			testMachineVariants("m0 should not contain any variants", m0);
 

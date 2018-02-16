@@ -3,31 +3,30 @@ package ac.soton.eventb.statemachines.generator.enumRules;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eventb.emf.core.EventBElement;
 import org.eventb.emf.core.context.Context;
 import org.eventb.emf.core.machine.Machine;
 
-import ac.soton.eventb.emf.diagrams.generator.AbstractRule;
-import ac.soton.eventb.emf.diagrams.generator.GenerationDescriptor;
-import ac.soton.eventb.emf.diagrams.generator.IRule;
-import ac.soton.eventb.emf.diagrams.generator.utils.Find;
-import ac.soton.eventb.emf.diagrams.generator.utils.Make;
+import ac.soton.emf.translator.eventb.rules.AbstractEventBGeneratorRule;
+import ac.soton.emf.translator.TranslationDescriptor;
+import ac.soton.emf.translator.configuration.IRule;
+import ac.soton.emf.translator.eventb.utils.Find;
+import ac.soton.emf.translator.eventb.utils.Make;
 import ac.soton.eventb.statemachines.Statemachine;
 import ac.soton.eventb.statemachines.TranslationKind;
 import ac.soton.eventb.statemachines.generator.strings.Strings;
 import ac.soton.eventb.statemachines.generator.utils.Utils;
 
-public class RemoveRedundantContextsRule extends AbstractRule implements IRule{
+public class RemoveRedundantContextsRule extends AbstractEventBGeneratorRule implements IRule{
 
 	/**
 	 * Only enabled for enumeration translation
 	 */
 	@Override
-	public boolean enabled(EventBElement sourceElement) throws Exception  {
+	public boolean enabled(EObject sourceElement) throws Exception  {
 		Machine container = (Machine)EcoreUtil.getRootContainer(sourceElement);
-		
-		
+
 		return Utils.isRootStatemachine((Statemachine)sourceElement) &&
 				((Statemachine) sourceElement).getTranslation().equals(TranslationKind.SINGLEVAR) &&
 				container.getRefines().size() > 0; //Just in refinements, when contexts get extended
@@ -47,12 +46,12 @@ public class RemoveRedundantContextsRule extends AbstractRule implements IRule{
 	 * is already extending the abstract one
 	 */
 	@Override
-	public boolean dependenciesOK(EventBElement sourceElement, final List<GenerationDescriptor> generatedElements) throws Exception  {
+	public boolean dependenciesOK(EObject sourceElement, final List<TranslationDescriptor> generatedElements) throws Exception  {
 		Machine container = (Machine)EcoreUtil.getRootContainer(sourceElement);
-		Context implicitContext = (Context) Find.generatedElement(generatedElements, Find.project(container), components, Strings.CTX_NAME(container));
+		Context implicitContext = (Context) Find.generatedElement(generatedElements, Find.project(container), components, Strings.CTX_NAME((Statemachine)sourceElement));
 			
 		if(implicitContext == null){
-			implicitContext = (Context) Find.named(container.getSees(), Strings.CTX_NAME(container));
+			implicitContext = (Context) Find.named(container.getSees(), Strings.CTX_NAME((Statemachine)sourceElement));
 			if(implicitContext == null)
 				return false;
 			else{
@@ -66,18 +65,16 @@ public class RemoveRedundantContextsRule extends AbstractRule implements IRule{
 		}
 		
 	}
-	
-	
-	
+
 	@Override
-	public List<GenerationDescriptor> fire(EventBElement sourceElement, List<GenerationDescriptor> generatedElements) throws Exception {
-		List<GenerationDescriptor> ret = new ArrayList<GenerationDescriptor>();
+	public List<TranslationDescriptor> fire(EObject sourceElement, List<TranslationDescriptor> generatedElements) throws Exception {
+		List<TranslationDescriptor> ret = new ArrayList<TranslationDescriptor>();
 		Machine sourceMachine = (Machine)EcoreUtil.getRootContainer(sourceElement);
 		
-		Context implicitContext = (Context) Find.generatedElement(generatedElements, Find.project(sourceMachine), components, Strings.CTX_NAME(sourceMachine));
+		Context implicitContext = (Context) Find.generatedElement(generatedElements, Find.project(sourceMachine), components, Strings.CTX_NAME((Statemachine)sourceElement));
 		
 		if(implicitContext == null){
-			implicitContext = (Context) Find.named(sourceMachine.getSees(), Strings.CTX_NAME(sourceMachine));
+			implicitContext = (Context) Find.named(sourceMachine.getSees(), Strings.CTX_NAME((Statemachine)sourceElement));
 		}
 				
 		List<Context> redundantCtxs = findRedundantCtx(implicitContext);

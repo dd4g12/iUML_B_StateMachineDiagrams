@@ -3,22 +3,22 @@ package ac.soton.eventb.statemachines.generator.rules;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eventb.emf.core.EventBElement;
+import org.eclipse.emf.ecore.EObject;
 import org.eventb.emf.core.machine.Action;
 import org.eventb.emf.core.machine.Event;
 
-import ac.soton.eventb.emf.diagrams.generator.AbstractRule;
-import ac.soton.eventb.emf.diagrams.generator.GenerationDescriptor;
-import ac.soton.eventb.emf.diagrams.generator.IRule;
-import ac.soton.eventb.emf.diagrams.generator.utils.Make;
+import ac.soton.emf.translator.eventb.rules.AbstractEventBGeneratorRule;
+import ac.soton.emf.translator.TranslationDescriptor;
+import ac.soton.emf.translator.configuration.IRule;
+import ac.soton.emf.translator.eventb.utils.Make;
 import ac.soton.eventb.statemachines.Transition;
 import ac.soton.eventb.statemachines.generator.strings.Strings;
 
-public class TransitionAction2ActionRule extends AbstractRule  implements IRule {
+public class TransitionAction2ActionRule extends AbstractEventBGeneratorRule  implements IRule {
 	
 
 	@Override
-	public boolean dependenciesOK(EventBElement sourceElement, final List<GenerationDescriptor> generatedElements) throws Exception  {
+	public boolean dependenciesOK(EObject sourceElement, final List<TranslationDescriptor> generatedElements) throws Exception  {
 		return true;
 	
 	}
@@ -29,8 +29,8 @@ public class TransitionAction2ActionRule extends AbstractRule  implements IRule 
 	 * Generates actions from transition actions
 	 */
 	@Override
-	public List<GenerationDescriptor> fire(EventBElement sourceElement, List<GenerationDescriptor> generatedElements) throws Exception {
-		List<GenerationDescriptor> ret = new ArrayList<GenerationDescriptor>();
+	public List<TranslationDescriptor> fire(EObject sourceElement, List<TranslationDescriptor> generatedElements) throws Exception {
+		List<TranslationDescriptor> ret = new ArrayList<TranslationDescriptor>();
 	
 		Transition sourceTransition = (Transition) sourceElement;
 		List<Action> generatedActions = generateActions(sourceTransition);
