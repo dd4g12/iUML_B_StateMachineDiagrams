@@ -20,17 +20,12 @@ import ac.soton.eventb.statemachines.generator.utils.Utils;
 
 public class RootStatemachine2NewContextRule extends AbstractEventBGeneratorRule implements IRule{
 	
-	
-	
 	@Override
 	public boolean enabled(EObject sourceElement) throws Exception  {	
-		//Machine container = (Machine)EcoreUtil.getRootContainer(sourceElement);
 		return Utils.isRootStatemachine((Statemachine)sourceElement) &&
-				((Statemachine) sourceElement).getTranslation().equals(TranslationKind.SINGLEVAR); //&& 
-				//!hasImplicitContext(container);
-				
-	
+				((Statemachine) sourceElement).getTranslation().equals(TranslationKind.SINGLEVAR); 
 	}
+	
 	/**
 	 * Generates the implicit context
 	 */
@@ -41,38 +36,19 @@ public class RootStatemachine2NewContextRule extends AbstractEventBGeneratorRule
 
 		List<TranslationDescriptor> ret = new ArrayList<TranslationDescriptor>();
 	
-		Context implicitContext =  (Context) Make.context(container.getName() + Strings._IMPLICIT_CONTEXT, "");
+		Context implicitContext =  (Context) Make.context(Strings.CTX_NAME((Statemachine)sourceElement), "");
 		
-		ret.add(Make.descriptor(Find.project(container), components,implicitContext ,1));
+		ret.add(Make.descriptor(Find.project(container), components, implicitContext ,1));
 		ret.add(Make.descriptor(container, seesNames, implicitContext.getName(), 1));
 
-		for(Context abstractContext : getGeneratedAbstractContext(container)){
-			if(!implicitContext.getExtendsNames().contains(abstractContext.getName())){
-				implicitContext.getExtendsNames().add(abstractContext.getName());
+		Statemachine refinedStatemachine = ((Statemachine)sourceElement).getRefines();
+		if  (refinedStatemachine != null){
+			String refinedStatemachineContextName = Strings.CTX_NAME(refinedStatemachine);
+			if(!implicitContext.getExtendsNames().contains(refinedStatemachineContextName)){
+				implicitContext.getExtendsNames().add(refinedStatemachineContextName);
 			}
 		}
-
 		return ret;
-
-	}
-
-	/**
-	 * this returns the abstract seen implicit contexts
-	 * i.e. those that are named in the way we name implicit contexts
-	 * @param machine
-	 * @return
-	 */
-	//TODO:  
-	private List<Context> getGeneratedAbstractContext(Machine machine){
-		List<Context> abstractCtxs = new ArrayList<Context>();
-		for(Machine abstractMachine : machine.getRefines()){
-			for(Context ctx : abstractMachine.getSees()){
-				if(ctx.getName().equals(abstractMachine.getName() + Strings._IMPLICIT_CONTEXT)){
-					abstractCtxs.add(ctx);
-				}
-			}
-		}
-		return abstractCtxs;
 	}
 	
 }

@@ -37,7 +37,7 @@ public class RemoveImplicitContextRule extends AbstractEventBGeneratorRule  impl
 		
 		if(((Machine)container).getSees().size() != 0){
 			for(Context ctx : ((Machine)container).getSees()){
-				if(ctx.getName().equals(container.getName() + Strings._IMPLICIT_CONTEXT)){
+				if(ctx.getName().equals(Strings.CTX_NAME((Statemachine)sourceElement))){
 					//ret.add(Make.descriptor(Find.project(container), components, Make.context(container.getName() + Strings._IMPLICIT_CONTEXT,""), 1, true) );
 					//ret.add(Make.descriptor(container, sees,  ctx , 1, true));
 				}

@@ -1,6 +1,11 @@
 package ac.soton.eventb.statemachines.generator.strings;
 
+import java.text.MessageFormat;
+
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eventb.emf.core.EventBNamedCommentedComponentElement;
+
+import ac.soton.eventb.statemachines.Statemachine;
 
 
 public class Strings {
@@ -72,17 +77,35 @@ public class Strings {
 	public static String ENTER_   = "enter_";
 	public static String LEAVE_   = "leave_";
 	public static String _TYPE   = "_type";
-
-	// context name
-	public static String _IMPLICIT_CONTEXT   = "_implicitContext";
 	
 	// errors
 	public static String TRANSLATION_KIND_NOT_SUPPORTED_ERROR = "<Statemachine translation error: unknown translation kind>";
 	
 	//auxiliary methods
-	public static String CTX_NAME(EventBNamedCommentedComponentElement element){
-		return element.getName() + _IMPLICIT_CONTEXT;
+	// context name
+	private static String CTXT_NAME   = "{0}_Statemachine_{1}";
+	public static String CTX_NAME(Statemachine rootStatemachine){
+		return bind(CTXT_NAME, 
+				((EventBNamedCommentedComponentElement)EcoreUtil.getRootContainer(rootStatemachine)).getName(),
+				rootStatemachine.getName());
 	}
 
+	
+	/**
+	 * Bind the given message's substitution locations with the given string
+	 * values.
+	 * 
+	 * @param message
+	 *            the message to be manipulated
+	 * @param bindings
+	 *            An array of objects to be inserted into the message
+	 * @return the manipulated String
+	 */
+	private static String bind(String message, Object... bindings) {
+		if (message == null){
+			return "NULL STRING!!!";
+		}
+		return MessageFormat.format(message, bindings);
+	}
 	
 }

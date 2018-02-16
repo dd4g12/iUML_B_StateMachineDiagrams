@@ -22,13 +22,16 @@ import ac.soton.eventb.statemachines.generator.utils.Utils;
 
 public class Statemachine2ConstantRule extends AbstractEventBGeneratorRule implements IRule{
 
+	private Statemachine rootStatemachine = null;
+	
 	/**
 	 * Only enabled for enumeration translation
 	 */
 	@Override
 	public boolean enabled(EObject sourceElement) throws Exception  {
 		Statemachine sourceSM = (Statemachine) sourceElement;
-		return Utils.getRootStatemachine(sourceSM).getTranslation().equals(TranslationKind.SINGLEVAR) &&
+		rootStatemachine = Utils.getRootStatemachine(sourceSM);
+		return rootStatemachine.getTranslation().equals(TranslationKind.SINGLEVAR) &&
 				sourceSM.getRefines() == null && (Utils.hasParentState(sourceSM) || Utils.hasFinalState(sourceSM));
 	}
 
@@ -40,10 +43,10 @@ public class Statemachine2ConstantRule extends AbstractEventBGeneratorRule imple
 		EventBNamedCommentedComponentElement container = (EventBNamedCommentedComponentElement)EcoreUtil.getRootContainer(sourceElement);
 		
 		for(Context ctx : ((Machine)container).getSees())
-			if(ctx.getName().equals(Strings.CTX_NAME(container)))
+			if(ctx.getName().equals(Strings.CTX_NAME(rootStatemachine)))
 				return true;
 		
-		return Find.generatedElement(generatedElements, Find.project(container), components, Strings.CTX_NAME(container)) != null;
+		return Find.generatedElement(generatedElements, Find.project(container), components, Strings.CTX_NAME(rootStatemachine)) != null;
 	}
 	
 	/**
@@ -55,11 +58,11 @@ public class Statemachine2ConstantRule extends AbstractEventBGeneratorRule imple
 		EventBNamedCommentedComponentElement container = (EventBNamedCommentedComponentElement)EcoreUtil.getRootContainer(sourceElement);
 		
 		Statemachine sourceSM = (Statemachine) sourceElement;
-		Context ctx = (Context)Find.generatedElement(generatedElements, Find.project(container), components, Strings.CTX_NAME(container));
+		Context ctx = (Context)Find.generatedElement(generatedElements, Find.project(container), components, Strings.CTX_NAME(rootStatemachine));
 		
 		if(ctx == null){
 			for(Context ictx : ((Machine)container).getSees())
-				if(ictx.getName().equals(Strings.CTX_NAME(container))){
+				if(ictx.getName().equals(Strings.CTX_NAME(rootStatemachine))){
 					ctx = ictx;
 					break;
 				}
