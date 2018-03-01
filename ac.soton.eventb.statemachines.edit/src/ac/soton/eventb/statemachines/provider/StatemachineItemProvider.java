@@ -23,6 +23,7 @@ import java.util.List;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
@@ -320,46 +321,51 @@ public class StatemachineItemProvider
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
-
-		newChildDescriptors.add
-			(createChildParameter
-				(CorePackage.Literals.EVENT_BELEMENT__EXTENSIONS,
-				 StatemachinesFactory.eINSTANCE.createStatemachine()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(StatemachinesPackage.Literals.STATEMACHINE__NODES,
-				 StatemachinesFactory.eINSTANCE.createState()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(StatemachinesPackage.Literals.STATEMACHINE__NODES,
-				 StatemachinesFactory.eINSTANCE.createInitial()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(StatemachinesPackage.Literals.STATEMACHINE__NODES,
-				 StatemachinesFactory.eINSTANCE.createFinal()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(StatemachinesPackage.Literals.STATEMACHINE__NODES,
-				 StatemachinesFactory.eINSTANCE.createAny()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(StatemachinesPackage.Literals.STATEMACHINE__NODES,
-				 StatemachinesFactory.eINSTANCE.createJunction()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(StatemachinesPackage.Literals.STATEMACHINE__NODES,
-				 StatemachinesFactory.eINSTANCE.createFork()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(StatemachinesPackage.Literals.STATEMACHINE__TRANSITIONS,
-				 StatemachinesFactory.eINSTANCE.createTransition()));
+		
+			
+		if (object instanceof EObject && 
+			StatemachinesPackage.Literals.STATEMACHINE.getEAnnotation("org.eventb.emf.core.extendedMetaClasses") == null  || 
+			StatemachinesPackage.Literals.STATEMACHINE.getEAnnotation("org.eventb.emf.core.extendedMetaClasses").getReferences().contains(((EObject)object).eClass()))
+		
+			newChildDescriptors.add
+				(createChildParameter
+					(CorePackage.Literals.EVENT_BELEMENT__EXTENSIONS,
+				 	StatemachinesFactory.eINSTANCE.createStatemachine()));
+		
+			newChildDescriptors.add
+				(createChildParameter
+					(StatemachinesPackage.Literals.STATEMACHINE__NODES,
+				 	StatemachinesFactory.eINSTANCE.createState()));
+		
+			newChildDescriptors.add
+				(createChildParameter
+					(StatemachinesPackage.Literals.STATEMACHINE__NODES,
+				 	StatemachinesFactory.eINSTANCE.createInitial()));
+		
+			newChildDescriptors.add
+				(createChildParameter
+					(StatemachinesPackage.Literals.STATEMACHINE__NODES,
+				 	StatemachinesFactory.eINSTANCE.createFinal()));
+		
+			newChildDescriptors.add
+				(createChildParameter
+					(StatemachinesPackage.Literals.STATEMACHINE__NODES,
+				 	StatemachinesFactory.eINSTANCE.createAny()));
+		
+			newChildDescriptors.add
+				(createChildParameter
+					(StatemachinesPackage.Literals.STATEMACHINE__NODES,
+				 	StatemachinesFactory.eINSTANCE.createJunction()));
+		
+			newChildDescriptors.add
+				(createChildParameter
+					(StatemachinesPackage.Literals.STATEMACHINE__NODES,
+				 	StatemachinesFactory.eINSTANCE.createFork()));
+		
+			newChildDescriptors.add
+				(createChildParameter
+					(StatemachinesPackage.Literals.STATEMACHINE__TRANSITIONS,
+				 	StatemachinesFactory.eINSTANCE.createTransition()));
 	}
 
 }

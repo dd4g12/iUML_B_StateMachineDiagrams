@@ -157,11 +157,11 @@ public class StatemachineOwnerItemProvider
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
-
-		newChildDescriptors.add
-			(createChildParameter
-				(StatemachinesPackage.Literals.STATEMACHINE_OWNER__STATEMACHINES,
-				 StatemachinesFactory.eINSTANCE.createStatemachine()));
+		
+			newChildDescriptors.add
+				(createChildParameter
+					(StatemachinesPackage.Literals.STATEMACHINE_OWNER__STATEMACHINES,
+				 	StatemachinesFactory.eINSTANCE.createStatemachine()));
 	}
 
 	/**
