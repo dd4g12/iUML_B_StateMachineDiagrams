@@ -326,26 +326,26 @@ public class StateItemProvider
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
-
-		newChildDescriptors.add
-			(createChildParameter
-				(StatemachinesPackage.Literals.STATEMACHINE_OWNER__STATEMACHINES,
-				 StatemachinesFactory.eINSTANCE.createStatemachine()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(StatemachinesPackage.Literals.STATE__INVARIANTS,
-				 MachineFactory.eINSTANCE.createInvariant()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(StatemachinesPackage.Literals.STATE__ENTRY_ACTIONS,
-				 MachineFactory.eINSTANCE.createAction()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(StatemachinesPackage.Literals.STATE__EXIT_ACTIONS,
-				 MachineFactory.eINSTANCE.createAction()));
+		
+			newChildDescriptors.add
+				(createChildParameter
+					(StatemachinesPackage.Literals.STATEMACHINE_OWNER__STATEMACHINES,
+				 	StatemachinesFactory.eINSTANCE.createStatemachine()));
+		
+			newChildDescriptors.add
+				(createChildParameter
+					(StatemachinesPackage.Literals.STATE__INVARIANTS,
+				 	MachineFactory.eINSTANCE.createInvariant()));
+		
+			newChildDescriptors.add
+				(createChildParameter
+					(StatemachinesPackage.Literals.STATE__ENTRY_ACTIONS,
+				 	MachineFactory.eINSTANCE.createAction()));
+		
+			newChildDescriptors.add
+				(createChildParameter
+					(StatemachinesPackage.Literals.STATE__EXIT_ACTIONS,
+				 	MachineFactory.eINSTANCE.createAction()));
 	}
 
 	/**
