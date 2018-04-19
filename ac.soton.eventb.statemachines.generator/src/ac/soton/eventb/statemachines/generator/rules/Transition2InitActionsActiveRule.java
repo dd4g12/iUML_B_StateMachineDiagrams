@@ -22,6 +22,13 @@ import ac.soton.eventb.statemachines.TranslationKind;
 import ac.soton.eventb.statemachines.generator.strings.Strings;
 import ac.soton.eventb.statemachines.generator.utils.Utils;
 
+/**
+ * This rule translates a root state-machine using either the enumeration (single variable) translation or the 
+ * variables (single-variable) translation.
+ * It generates the initialisation actions to initialise the state-machine and all its nested-state-machines
+ * to a the state indicated to be initially active (i.e. the state targeted by a transition from the initial state).
+ * 
+ */
 public class Transition2InitActionsActiveRule extends AbstractEventBGeneratorRule  implements IRule {
 
 	
