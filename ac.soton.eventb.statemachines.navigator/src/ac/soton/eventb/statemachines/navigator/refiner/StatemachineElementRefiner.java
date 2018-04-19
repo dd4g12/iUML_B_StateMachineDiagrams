@@ -16,6 +16,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eventb.emf.core.EventBObject;
+import org.eventb.emf.core.machine.MachinePackage;
 
 import ac.soton.eventb.emf.core.extension.navigator.refiner.CoreextensionElementRefiner;
 import ac.soton.eventb.statemachines.StatemachinesPackage;
@@ -37,6 +38,7 @@ public class StatemachineElementRefiner extends CoreextensionElementRefiner {
 	@Override
 	protected void populateFilterByTypeList(final List<EClass> filterList){
 		super.populateFilterByTypeList(filterList);
+		filterList.add(MachinePackage.Literals.INVARIANT);
 	}
 	
 	/**
