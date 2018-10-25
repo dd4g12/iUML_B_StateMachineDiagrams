@@ -22,3 +22,4 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Vendor: %Bundle-Vendor
 Bundle-ActivationPolicy: lazy
 Export-Package: ac.soton.eventb.statemachines.navigator.refiner
+Automatic-Module-Name: ac.soton.eventb.statemachines.navigator

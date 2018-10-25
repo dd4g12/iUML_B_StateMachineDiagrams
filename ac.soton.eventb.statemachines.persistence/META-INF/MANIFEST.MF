@@ -12,3 +12,4 @@ Require-Bundle: ac.soton.eventb.statemachines;bundle-version="[4.0.0,5.0.0)",
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Export-Package: ac.soton.eventb.statemachines.persistence
+Automatic-Module-Name: ac.soton.eventb.statemachines.persistence
