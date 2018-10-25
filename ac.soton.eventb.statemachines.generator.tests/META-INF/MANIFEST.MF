@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: ac.soton.eventb.statemachines.generator.tests
 Bundle-Version: 0.0.1.qualifier
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-Vendor: %pluginVendor
 Require-Bundle: org.junit;bundle-version="[4.11.0,5.0.0)",
  ac.soton.eventb.emf.diagrams.generator;bundle-version="[4.0.0,5.0.0)",
