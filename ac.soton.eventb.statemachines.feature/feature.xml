@@ -4,7 +4,7 @@
       label="%featureName"
       version="4.0.0.qualifier"
       provider-name="%featureVendor"
-      plugin="ac.soton.iumlb.branding"
+      plugin="ac.soton.eventb.statemachines.branding"
       license-feature="org.rodinp.license"
       license-feature-version="1.0.0.release">
 
@@ -53,18 +53,22 @@
       <import plugin="org.rodinp.keyboard.ui" version="2.0.0" match="compatible"/>
       <import plugin="org.eventb.ui" version="3.0.0" match="compatible"/>
       <import plugin="org.eventb.emf.core" version="5.0.0" match="compatible"/>
+      <import plugin="org.eventb.emf.core.edit" version="2.0.0" match="compatible"/>
       <import plugin="org.eventb.emf.persistence" version="3.0.0" match="compatible"/>
+      <import plugin="ac.soton.eventb.emf.core.extension" version="5.0.0" match="compatible"/>
+      <import plugin="ac.soton.eventb.emf.core.extension.edit" version="2.0.0" match="compatible"/>
       <import plugin="ac.soton.eventb.emf.diagrams" version="4.0.1" match="compatible"/>
       <import plugin="ac.soton.eventb.emf.diagrams.edit" version="2.1.0" match="compatible"/>
       <import plugin="ac.soton.eventb.emf.diagrams.generator" version="4.0.0" match="compatible"/>
       <import plugin="ac.soton.eventb.emf.diagrams.navigator" version="3.0.0" match="compatible"/>
+      <import plugin="ac.soton.eventb.emf.diagrams.refactor" version="1.0.0" match="compatible"/>
       <import plugin="ac.soton.eventb.statemachines" version="4.0.0" match="compatible"/>
       <import plugin="ac.soton.eventb.statemachines.edit" version="2.1.0" match="compatible"/>
       <import plugin="ac.soton.eventb.emf.core.extension.persistence" version="2.0.0" match="compatible"/>
       <import plugin="org.eclipse.emf.transaction" version="1.4.0" match="compatible"/>
       <import plugin="org.rodinp.core" version="1.7.0" match="compatible"/>
       <import plugin="org.eventb.core" version="3.1.0" match="compatible"/>
-      <import plugin="ac.soton.eventb.emf.core.extension.navigator" version="4.1.0" match="compatible"/>
+      <import plugin="ac.soton.eventb.emf.core.extension.navigator" version="5.0.0" match="compatible"/>
       <import plugin="ac.soton.eventb.statemachines.diagram" version="3.0.0" match="compatible"/>
       <import plugin="ac.soton.eventb.statemachines.edit" version="2.0.0" match="compatible"/>
       <import plugin="ac.soton.eventb.emf.diagrams" version="4.0.0" match="compatible"/>
@@ -77,10 +81,6 @@
       <import plugin="org.eclipse.emf.edit" version="2.7.2" match="compatible"/>
       <import plugin="org.eclipse.emf.ecore" version="2.10.1" match="compatible"/>
       <import plugin="ac.soton.eventb.emf.diagrams.edit" version="2.0.0" match="compatible"/>
-      <import plugin="org.eventb.emf.core.edit" version="2.0.0" match="compatible"/>
-      <import plugin="ac.soton.eventb.emf.core.extension" version="5.0.0" match="compatible"/>
-      <import plugin="ac.soton.eventb.emf.core.extension.edit" version="2.0.0" match="compatible"/>
-      <import plugin="ac.soton.eventb.emf.diagrams.refactor" version="1.0.0" match="compatible"/>
    </requires>
 
    <plugin
@@ -119,16 +119,16 @@
          unpack="false"/>
 
    <plugin
-         id="ac.soton.iumlb.branding"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"/>
-
-   <plugin
          id="ac.soton.eventb.statemachines.edit"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
+
+   <plugin
+         id="ac.soton.eventb.statemachines.branding"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
 
 </feature>
