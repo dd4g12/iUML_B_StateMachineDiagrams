@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011 University of Southampton.
+ * Copyright (c) 2011-2019 University of Southampton.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -7,6 +7,7 @@
  */
 package ac.soton.eventb.statemachines.navigator.providers;
 
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.gmf.runtime.diagram.core.preferences.PreferencesHint;
@@ -33,20 +34,27 @@ public class StatemachineDiagramProvider implements IDiagramProvider {
 	public String getDiagramFileName(EObject element) {
 		if (element instanceof Statemachine) {
 			String filename = "";
+			String prefix = "";
 			Statemachine rootStatemachine = (Statemachine) element;
 			
 			// find a root statemachine
 			while (rootStatemachine.eContainer() instanceof State
 					&& rootStatemachine.eContainer().eContainer() instanceof Statemachine)
 				rootStatemachine = (Statemachine) rootStatemachine.eContainer().eContainer();
-			//construct filename
-			filename = rootStatemachine.getName() + "."+fileExtension;
-			// prefix with machine name
-			EObject root = EcoreUtil.getRootContainer(element);
-			if (root != null && root instanceof Machine)
-				filename = ((Machine) root).getName() + "." + filename;
+			//construct filename from root state-machine name
+			filename = rootStatemachine.getName();
 			
-			return filename;
+			// prefix with machine name or model filename (to make refinements unique)
+			EObject root = EcoreUtil.getRootContainer(element);
+			if (root != null && root instanceof Machine) {
+				prefix = ((Machine) root).getName();
+			}else{
+				// added cfs 2019 in case state-machine is not contained by a machine
+				URI uri = rootStatemachine.eResource().getURI();
+				prefix = uri.trimFileExtension().lastSegment();
+			}
+			
+			return prefix + "." + filename + "." + getFileExtension();
 		}
 		return null;
 	}
