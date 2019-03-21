@@ -101,5 +101,11 @@
             ePackage="http://soton.ac.uk/models/eventb/statemachines/2014">
       </refinementDefinition>
    </extension>
+   <extension
+         point="ac.soton.eventb.emf.core.extension.navigator.emfFileExtensions">
+      <model
+            extension="stm">
+      </model>
+   </extension>
 
 </plugin>
