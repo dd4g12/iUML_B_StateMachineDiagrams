@@ -14,7 +14,6 @@ import org.eventb.emf.core.CorePackage;
 
 import ac.soton.eventb.emf.diagrams.sheet.AbstractEditTableWithDefaultNamingPropertySection;
 import ac.soton.eventb.emf.diagrams.util.custom.DiagramUtils;
-import ac.soton.eventb.statemachines.State;
 import ac.soton.eventb.statemachines.Statemachine;
 import ac.soton.eventb.statemachines.StatemachinesPackage;
 
@@ -68,10 +67,5 @@ public class NodesPropertySection extends AbstractEditTableWithDefaultNamingProp
 		default : return -1;	//unknown
 		}
 	}
-
-//	@Override
-//	protected String getLabelText() {
-//		return "nodes";
-//	}
-//	
+	
 }

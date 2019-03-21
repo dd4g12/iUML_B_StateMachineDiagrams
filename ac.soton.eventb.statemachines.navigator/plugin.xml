@@ -108,4 +108,11 @@
       </model>
    </extension>
 
+  <extension
+        point="ac.soton.eventb.emf.core.extension.navigator.emfFileExtensions">
+     <model
+           extension="stm">
+     </model>
+  </extension>
+  
 </plugin>
