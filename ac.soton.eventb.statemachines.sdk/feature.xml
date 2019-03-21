@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="ac.soton.eventb.statemachines.sdk"
+      label="%featureName"
+      version="4.0.0.release"
+      provider-name="%featureVendor"
+      plugin="ac.soton.eventb.statemachines.branding"
+      license-feature="org.rodinp.license"
+      license-feature-version="1.0.0.release">
+
+   <description>
+      %featureDescription
+   </description>
+
+   <copyright>
+      %featureCopyright
+   </copyright>
+
+   <url>
+      <update label="%updateSiteName" url="http://rodin-b-sharp.sourceforge.net/updates"/>
+   </url>
+
+   <includes
+         id="ac.soton.eventb.statemachines.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="ac.soton.eventb.statemachines.source.feature"
+         version="0.0.0"/>
+
+   <plugin
+         id="ac.soton.eventb.statemachines.generator.tests"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="ac.soton.eventb.statemachines.generator.tests.source"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="ac.soton.eventb.statemachines.persistence.tests"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="ac.soton.eventb.statemachines.persistence.tests.source"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>
