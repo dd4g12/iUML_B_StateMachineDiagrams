@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension-point id="ac.soton.eventb.emf.diagrams.navigator.diagramProviders" name="%extension-point.name" schema="schema//ac.soton.eventb.emf.diagrams.navigator.diagramProviders.exsd"/>
+   <extension
+         point="org.eclipse.ui.navigator.navigatorContent">
+      <actionProvider
+            class="ac.soton.eventb.emf.diagrams.navigator.provider.DiagramActionProvider"
+            id="ac.soton.eventb.emf.diagrams.navigator.provider.diagramActionProvider">
+         <enablement>
+            <or>
+               <adapt
+                     type="org.eclipse.emf.ecore.EObject">
+                  <instanceof
+                        value="ac.soton.eventb.emf.diagrams.Diagram">
+                  </instanceof>
+               </adapt>
+            </or>
+         </enablement>
+      </actionProvider>
+   </extension>
+   <extension
+         point="org.eclipse.ui.navigator.viewer">
+      <viewerActionBinding
+            viewerId="fr.systerel.explorer.navigator.view">
+         <includes>
+            <actionExtension
+                  pattern="ac.soton.eventb.emf.diagrams.navigator.provider.diagramActionProvider">
+            </actionExtension>
+         </includes>
+      </viewerActionBinding>
+   </extension>
+   <extension
+         point="org.rodinp.core.refinements">
+      <Participant
+            class="ac.soton.eventb.emf.diagrams.navigator.refiner.DiagramCopier"
+            id="diagramCopierMachine"
+            refinement-id="org.eventb.core.machineRefinement">
+      </Participant>
+      <Order
+            first-participant-id="org.eventb.core.machineRefiner"
+            second-participant-id="ac.soton.eventb.emf.diagrams.navigator.diagramCopierMachine">
+      </Order>
+      <Participant
+            class="ac.soton.eventb.emf.diagrams.navigator.refiner.DiagramRegenerator"
+            id="diagramRegeneratorMachine"
+            refinement-id="org.eventb.core.machineRefinement">
+      </Participant>
+      <Order
+            first-participant-id="org.eventb.core.machineRefiner"
+            second-participant-id="ac.soton.eventb.emf.diagrams.navigator.diagramRegeneratorMachine">
+      </Order>
+      <Participant
+            class="ac.soton.eventb.emf.diagrams.navigator.refiner.DiagramRegenerator"
+            id="diagramRegeneratorContext"
+            refinement-id="org.eventb.core.contextRefinement">
+      </Participant>
+      <Order
+            first-participant-id="org.eventb.core.contextRefiner"
+            second-participant-id="ac.soton.eventb.emf.diagrams.navigator.diagramRegeneratorContext">
+      </Order>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            locationURI="popup:fr.systerel.explorer.navigator.view">
+         <command
+               commandId="ac.soton.eventb.emf.diagrams.navigator.commands.deleteDiagramElement"
+               icon="icons/Delete.png"
+               label="Delete"
+               style="push"
+               tooltip="Delete the selected iUML-B diagram">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="selection">
+                  <iterate
+                        ifEmpty="false">
+                     <and>
+                        <adapt
+                              type="org.eclipse.emf.ecore.EObject">
+                           <instanceof
+                                 value="ac.soton.eventb.emf.diagrams.Diagram">
+                           </instanceof>
+                        </adapt>
+                        <test
+                              property="ac.soton.eventb.emf.core.extension.navigator.eventBRootChild"
+                              value="true">
+                        </test>
+                     </and>
+                  </iterate>
+               </with>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="ac.soton.eventb.emf.diagrams.navigator.commands.archiveProject"
+               icon="icons/Archive.png"
+               label="Archive Project"
+               style="push"
+               tooltip="Archive the project using iUML-B preference settings">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="selection">
+                  <iterate
+                        ifEmpty="false">
+                     <or>
+                       <instanceof
+                             value="org.eclipse.core.resources.IProject">
+                       </instanceof>
+                     </or>
+                  </iterate>
+               </with>
+            </visibleWhen>
+         </command>
+      </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:fr.systerel.explorer.navigator.view">
+         <menu
+               icon="icons/IUMLB.png"
+               id="ac.soton.eventb.emf.diagrams.navigator.addDiagram"
+               label="Add iUML-B....">
+         </menu>
+      </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+     <category
+        description="Commands associated with iUML-B Diagrams"
+        id="ac.soton.eventb.emf.diagrams.iUMLB"
+        name="iUML-B Commands">
+      </category>
+      <command
+            categoryId="ac.soton.eventb.emf.diagrams.iUMLB"
+            defaultHandler="ac.soton.eventb.emf.diagrams.navigator.handler.ArchiveProjectHandler"
+            description="Archive the project using iUML-B preference settings"
+            id="ac.soton.eventb.emf.diagrams.navigator.commands.archiveProject"
+            name="Archive Project">
+      </command>
+      <command
+            categoryId="ac.soton.eventb.emf.diagrams.iUMLB"
+            defaultHandler="ac.soton.eventb.emf.diagrams.navigator.handler.DeleteDiagramElementHandler"
+            description="Delete the selected iUML-B diagram"
+            id="ac.soton.eventb.emf.diagrams.navigator.commands.deleteDiagramElement"
+            name="Delete">
+      </command>
+   </extension>
+   
+   <extension
+         point="org.eclipse.ui.startup">
+      <startup
+            class="ac.soton.eventb.emf.diagrams.navigator.jobs.DiagramUpdaterListener">
+      </startup>
+   </extension>
+
+   <extension point="org.eclipse.ui.preferencePages" id="prefpages">
+      <page
+            class="ac.soton.eventb.emf.diagrams.navigator.preferences.IUMLBPreferencesPage"
+            id="ac.soton.eventb.iumlb"
+            name="%prefpage.ac.soton.eventb.iumlb">
+      </page>
+   </extension>
+</plugin>
