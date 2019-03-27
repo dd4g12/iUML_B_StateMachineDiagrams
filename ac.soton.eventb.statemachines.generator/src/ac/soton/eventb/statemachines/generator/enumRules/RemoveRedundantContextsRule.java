@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eventb.emf.core.context.Context;
 import org.eventb.emf.core.machine.Machine;
 
@@ -20,17 +19,18 @@ import ac.soton.eventb.statemachines.generator.utils.Utils;
 
 public class RemoveRedundantContextsRule extends AbstractEventBGeneratorRule implements IRule{
 
+	private Machine machine;
+	private Context implicitContext;
+	
 	/**
 	 * Only enabled for enumeration translation
 	 */
 	@Override
 	public boolean enabled(EObject sourceElement) throws Exception  {
-		Machine container = (Machine)EcoreUtil.getRootContainer(sourceElement);
-
+		machine = (Machine) Utils.getTranslationTarget();
 		return Utils.isRootStatemachine((Statemachine)sourceElement) &&
 				((Statemachine) sourceElement).getTranslation().equals(TranslationKind.SINGLEVAR) &&
-				container.getRefines().size() > 0; //Just in refinements, when contexts get extended
-				
+				machine.getRefines().size() > 0; //Just in refinements, when contexts get extended
 	}
 
 	/**
@@ -47,44 +47,22 @@ public class RemoveRedundantContextsRule extends AbstractEventBGeneratorRule imp
 	 */
 	@Override
 	public boolean dependenciesOK(EObject sourceElement, final List<TranslationDescriptor> generatedElements) throws Exception  {
-		Machine container = (Machine)EcoreUtil.getRootContainer(sourceElement);
-		Context implicitContext = (Context) Find.generatedElement(generatedElements, Find.project(container), components, Strings.CTX_NAME((Statemachine)sourceElement));
-			
+		implicitContext = (Context) Find.generatedElement(generatedElements, Find.project(machine), components, Strings.CTX_NAME(machine, (Statemachine)sourceElement));
 		if(implicitContext == null){
-			implicitContext = (Context) Find.named(container.getSees(), Strings.CTX_NAME((Statemachine)sourceElement));
-			if(implicitContext == null)
-				return false;
-			else{
-				return true;
-			}
-			
+			implicitContext = (Context) Find.named(machine.getSees(), Strings.CTX_NAME(machine, (Statemachine)sourceElement));
 		}
-			
-		else{
-				return true;
-		}
-		
+		return implicitContext != null;
 	}
 
 	@Override
 	public List<TranslationDescriptor> fire(EObject sourceElement, List<TranslationDescriptor> generatedElements) throws Exception {
-		List<TranslationDescriptor> ret = new ArrayList<TranslationDescriptor>();
-		Machine sourceMachine = (Machine)EcoreUtil.getRootContainer(sourceElement);
-		
-		Context implicitContext = (Context) Find.generatedElement(generatedElements, Find.project(sourceMachine), components, Strings.CTX_NAME((Statemachine)sourceElement));
-		
-		if(implicitContext == null){
-			implicitContext = (Context) Find.named(sourceMachine.getSees(), Strings.CTX_NAME((Statemachine)sourceElement));
-		}
-				
+		List<TranslationDescriptor> ret = new ArrayList<TranslationDescriptor>();						
 		List<Context> redundantCtxs = findRedundantCtx(implicitContext);
 		for(Context ctx : redundantCtxs){
-			if(Find.named(sourceMachine.getSees(), ctx.getName()) != null){
-				ret.add(Make.descriptor(sourceMachine, sees, ctx, true));
+			if(Find.named(machine.getSees(), ctx.getName()) != null){
+				ret.add(Make.descriptor(machine, sees, ctx, true));
 			}
 		}
-		
-
 		return ret;
 	}
 
@@ -96,9 +74,7 @@ public class RemoveRedundantContextsRule extends AbstractEventBGeneratorRule imp
 			redundant.addAll(findRedundantCtx(ictx));
 		}
 		return redundant;
-		
 	}
-	
 
 }
 

@@ -4,9 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eventb.emf.core.EventBNamedCommentedComponentElement;
 import org.eventb.emf.core.machine.Invariant;
+import org.eventb.emf.core.machine.Machine;
 
 import ac.soton.emf.translator.TranslationDescriptor;
 import ac.soton.emf.translator.configuration.IRule;
@@ -20,7 +19,6 @@ import ac.soton.eventb.statemachines.generator.utils.Utils;
 
 public class State2ConstraintInvariantsRule extends AbstractEventBGeneratorRule  implements IRule {
 	
-	
 	/**
 	 * Works for both translations
 	 * 
@@ -28,7 +26,6 @@ public class State2ConstraintInvariantsRule extends AbstractEventBGeneratorRule 
 	
 	private Statemachine rootSM;
 	
-
 	/**
 	 * State2ConstraintInvariant
 	 * 
@@ -36,27 +33,19 @@ public class State2ConstraintInvariantsRule extends AbstractEventBGeneratorRule 
 	 */
 	@Override
 	public List<TranslationDescriptor> fire(EObject sourceElement, List<TranslationDescriptor> generatedElements) throws Exception {
-
 		List<TranslationDescriptor> ret = new ArrayList<TranslationDescriptor>();
 		List<Invariant> newInvariants = new ArrayList<Invariant>();
-
 		State sourceState = (State) sourceElement;
 		rootSM = Utils.getRootStatemachine(sourceState);
-		
-		EventBNamedCommentedComponentElement container = (EventBNamedCommentedComponentElement)EcoreUtil.getRootContainer(sourceElement);
-
+		Machine machine = (Machine) Utils.getTranslationTarget();;
 		for(Invariant inv : sourceState.getInvariants()){
 			newInvariants.add(Make.invariant(inv.getName(), inv.isTheorem(),
 					generatePredicate(sourceState, inv), ""));
 		}
-		
 		for (Invariant inv : newInvariants){
-			ret.add(Make.descriptor(container, invariants, inv, 10));
+			ret.add(Make.descriptor(machine, invariants, inv, 10));
 		}
-
-
 		return ret;
-
 	}
 	/**
 	 * Generates the predicate from a state and its invariant
@@ -66,15 +55,13 @@ public class State2ConstraintInvariantsRule extends AbstractEventBGeneratorRule 
 	 * @return
 	 */
 	private String generatePredicate(State s, Invariant inv){
-		if(rootSM.getTranslation().equals(TranslationKind.MULTIVAR))
+		if(rootSM.getTranslation().equals(TranslationKind.MULTIVAR)) {
 			return generatePredicateForMultivar(s, inv);
-		else if (rootSM.getTranslation().equals(TranslationKind.SINGLEVAR)){
+		}else if (rootSM.getTranslation().equals(TranslationKind.SINGLEVAR)){
 			return generatePredicateForSinglevar(s,inv);
-		}
-		else
+		}else {
 			return Strings.TRANSLATION_KIND_NOT_SUPPORTED_ERROR;
-			
-
+		}
 	}
 	/**
 	 * Generates the predicate for the Variables translation
@@ -83,13 +70,13 @@ public class State2ConstraintInvariantsRule extends AbstractEventBGeneratorRule 
 	 * @return
 	 */
 	private String generatePredicateForMultivar (State s, Invariant inv){
-		if(rootSM.getInstances() == null)
+		if(rootSM.getInstances() == null) {
 			return Utils.parenthesize(s.getName() + Strings.B_EQ + Strings.B_TRUE) + Strings.B_IMPL + Utils.parenthesize(inv.getPredicate());
-		else
+		}else {
 			return Strings.B_FORALL + rootSM.getSelfName() + Strings.B_MIDDOT +
 					Utils.parenthesize(rootSM.getSelfName() + Strings.B_IN + s.getName())+
 					Strings.B_IMPL + Utils.parenthesize(inv.getPredicate());
-		
+		}
 	}
 	
 	/**
@@ -99,17 +86,15 @@ public class State2ConstraintInvariantsRule extends AbstractEventBGeneratorRule 
 	 * @return
 	 */
 	private String generatePredicateForSinglevar (State s, Invariant inv){
-		if(rootSM.getInstances() == null)
+		if(rootSM.getInstances() == null) {
 			return Utils.parenthesize(Utils.getStatemachine(s).getName() + Strings.B_EQ + s.getName())+
 					Strings.B_IMPL + Utils.parenthesize(inv.getPredicate());
-		else{
+		}else{
 			return Strings.B_FORALL + rootSM.getSelfName() + Strings.B_MIDDOT+
 					Utils.parenthesize(Utils.getStatemachine(s).getName() +
 					Utils.parenthesize(rootSM.getSelfName()) + Strings.B_EQ + s.getName()) + Strings.B_IMPL +
 					Utils.parenthesize(inv.getPredicate());
 		}			
 	}
-
-
 
 }

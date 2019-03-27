@@ -68,7 +68,7 @@ public class Transition2EnterActionRule extends AbstractEventBGeneratorRule  imp
 			}
 		
 		for(Event ev : sourceTransition.getElaborates()){
-			if(!ev.getName().equals(Strings.INIT)){
+			if(!ev.getName().equals(Utils.INITIALISATION_EVENT_NAME)){
 				for(Action a : generatedActions){
 					if (!a.getName().equals("") &&
 							Find.generatedElement(generatedElements, ev, actions, a.getName()) == null){

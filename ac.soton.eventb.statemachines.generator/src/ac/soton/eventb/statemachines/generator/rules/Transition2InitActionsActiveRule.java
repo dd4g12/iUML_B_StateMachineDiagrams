@@ -49,7 +49,7 @@ public class Transition2InitActionsActiveRule extends AbstractEventBGeneratorRul
 		Transition sourceTransition = (Transition) sourceElement;
 
 		for(Event e : sourceTransition.getElaborates()){
-			if(e.getName().equals(Strings.INIT))
+			if(e.getName().equals(Utils.INITIALISATION_EVENT_NAME))
 				return true;
 		}
 		
@@ -87,7 +87,7 @@ public class Transition2InitActionsActiveRule extends AbstractEventBGeneratorRul
 	 */
 	private Event getInitEvent(Transition t){
 		for(Event e : t.getElaborates()){
-			if(e.getName().equals(Strings.INIT))
+			if(e.getName().equals(Utils.INITIALISATION_EVENT_NAME))
 				return e;
 		}
 		return null;

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eventb.emf.core.EventBNamedCommentedComponentElement;
 import org.eventb.emf.core.machine.Invariant;
 
@@ -41,11 +40,9 @@ public class LiftedRootStatemachine2TypingInvariantRule extends AbstractEventBGe
 		List<TranslationDescriptor> ret = new ArrayList<TranslationDescriptor>();
 		Statemachine rootSM = (Statemachine) sourceElement;
 		
-		EventBNamedCommentedComponentElement container = (EventBNamedCommentedComponentElement)EcoreUtil.getRootContainer(rootSM);
+		EventBNamedCommentedComponentElement container = Utils.getTranslationTarget();
 	
 		List<Invariant> newInvariants = statemachine2typeInvariant(rootSM);
-		
-		
 		for(Invariant inv : newInvariants){
 			ret.add(Make.descriptor(container, invariants, inv, 1));
 		}

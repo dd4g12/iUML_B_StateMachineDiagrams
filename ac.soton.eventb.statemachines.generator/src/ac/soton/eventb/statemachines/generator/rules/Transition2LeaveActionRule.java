@@ -62,7 +62,7 @@ public class Transition2LeaveActionRule extends AbstractEventBGeneratorRule  imp
 
 		for(Event ev : sourceTransition.getElaborates()){
 			generatedActions.clear();
-			if(!ev.getName().equals(Strings.INIT)){
+			if(!ev.getName().equals(Utils.INITIALISATION_EVENT_NAME)){
 				generatedActions.addAll(generateLeaveActionsFromNode(sourceTransition.getSource(), sourceTransition, ev));
 			}
 			for(Action a : generatedActions){

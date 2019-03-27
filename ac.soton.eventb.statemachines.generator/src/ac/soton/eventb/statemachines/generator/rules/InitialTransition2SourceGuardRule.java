@@ -58,7 +58,7 @@ public class InitialTransition2SourceGuardRule extends AbstractEventBGeneratorRu
 		Guard grd = (Guard) Make.guard(name, predicate);
 		
 		for(Event e : sourceTransition.getElaborates()){
-			if(!e.getName().equals(Strings.INIT))
+			if(!e.getName().equals(Utils.INITIALISATION_EVENT_NAME))
 				ret.add(Make.descriptor(e, guards, Make.guard(grd.getName(), grd.isTheorem(), grd.getPredicate(), grd.getComment()), 10));
 		}
 		

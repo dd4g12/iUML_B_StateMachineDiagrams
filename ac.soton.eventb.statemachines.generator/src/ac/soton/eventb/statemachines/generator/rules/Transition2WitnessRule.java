@@ -12,7 +12,7 @@ import ac.soton.emf.translator.configuration.IRule;
 import ac.soton.emf.translator.eventb.rules.AbstractEventBGeneratorRule;
 import ac.soton.emf.translator.eventb.utils.Make;
 import ac.soton.eventb.statemachines.Transition;
-import ac.soton.eventb.statemachines.generator.strings.Strings;
+import ac.soton.eventb.statemachines.generator.utils.Utils;
 
 
 /**
@@ -20,11 +20,8 @@ import ac.soton.eventb.statemachines.generator.strings.Strings;
  * @author matheus
  *
  */
-
 public class Transition2WitnessRule extends AbstractEventBGeneratorRule  implements IRule {
 	
-
-
 	/**
 	 * Trasition2Witness
 	 * 
@@ -37,7 +34,7 @@ public class Transition2WitnessRule extends AbstractEventBGeneratorRule  impleme
 		Transition sourceTransition = (Transition) sourceElement;
 		
 		for(Event ev : sourceTransition.getElaborates()){
-			if(!ev.getName().equals(Strings.INIT)){
+			if(!ev.getName().equals(Utils.INITIALISATION_EVENT_NAME)){
 				List<Witness> generatedWitness = generateWitness(sourceTransition, ev);
 				for(Witness w : generatedWitness){
 					ret.add(Make.descriptor(ev, witnesses, Make.witness(w.getName(), w.getPredicate(), w.getComment()), 10));

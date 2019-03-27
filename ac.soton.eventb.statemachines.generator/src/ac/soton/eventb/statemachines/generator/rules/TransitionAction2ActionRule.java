@@ -7,12 +7,12 @@ import org.eclipse.emf.ecore.EObject;
 import org.eventb.emf.core.machine.Action;
 import org.eventb.emf.core.machine.Event;
 
-import ac.soton.emf.translator.eventb.rules.AbstractEventBGeneratorRule;
 import ac.soton.emf.translator.TranslationDescriptor;
 import ac.soton.emf.translator.configuration.IRule;
+import ac.soton.emf.translator.eventb.rules.AbstractEventBGeneratorRule;
 import ac.soton.emf.translator.eventb.utils.Make;
 import ac.soton.eventb.statemachines.Transition;
-import ac.soton.eventb.statemachines.generator.strings.Strings;
+import ac.soton.eventb.statemachines.generator.utils.Utils;
 
 public class TransitionAction2ActionRule extends AbstractEventBGeneratorRule  implements IRule {
 	
@@ -37,7 +37,7 @@ public class TransitionAction2ActionRule extends AbstractEventBGeneratorRule  im
 		
 		
 		for(Event ev : sourceTransition.getElaborates()){
-			if(!ev.getName().equals(Strings.INIT)){
+			if(!ev.getName().equals(Utils.INITIALISATION_EVENT_NAME)){
 				for(Action a : generatedActions){
 					ret.add(Make.descriptor(ev, actions, Make.action(a.getName(), a.getAction(), a.getComment()), 10));
 				}				
