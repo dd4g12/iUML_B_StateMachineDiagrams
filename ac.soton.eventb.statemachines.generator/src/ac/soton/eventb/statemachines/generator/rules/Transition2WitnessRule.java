@@ -1,3 +1,13 @@
+/*******************************************************************************
+ *  Copyright (c) 2010-2019 University of Southampton.
+ *  All rights reserved. This program and the accompanying materials
+ *  are made available under the terms of the Eclipse Public License v1.0
+ *  which accompanies this distribution, and is available at
+ *  http://www.eclipse.org/legal/epl-v10.html
+ *   
+ *  Contributors:
+ *  University of Southampton - Initial implementation
+ *******************************************************************************/
 package ac.soton.eventb.statemachines.generator.rules;
 
 import java.util.ArrayList;
@@ -12,7 +22,7 @@ import ac.soton.emf.translator.configuration.IRule;
 import ac.soton.emf.translator.eventb.rules.AbstractEventBGeneratorRule;
 import ac.soton.emf.translator.eventb.utils.Make;
 import ac.soton.eventb.statemachines.Transition;
-import ac.soton.eventb.statemachines.generator.strings.Strings;
+import ac.soton.eventb.statemachines.generator.utils.Utils;
 
 
 /**
@@ -20,11 +30,8 @@ import ac.soton.eventb.statemachines.generator.strings.Strings;
  * @author matheus
  *
  */
-
 public class Transition2WitnessRule extends AbstractEventBGeneratorRule  implements IRule {
 	
-
-
 	/**
 	 * Trasition2Witness
 	 * 
@@ -37,7 +44,7 @@ public class Transition2WitnessRule extends AbstractEventBGeneratorRule  impleme
 		Transition sourceTransition = (Transition) sourceElement;
 		
 		for(Event ev : sourceTransition.getElaborates()){
-			if(!ev.getName().equals(Strings.INIT)){
+			if(!ev.getName().equals(Utils.INITIALISATION_EVENT_NAME)){
 				List<Witness> generatedWitness = generateWitness(sourceTransition, ev);
 				for(Witness w : generatedWitness){
 					ret.add(Make.descriptor(ev, witnesses, Make.witness(w.getName(), w.getPredicate(), w.getComment()), 10));

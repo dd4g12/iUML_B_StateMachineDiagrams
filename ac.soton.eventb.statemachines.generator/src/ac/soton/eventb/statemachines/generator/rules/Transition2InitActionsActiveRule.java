@@ -1,3 +1,13 @@
+/*******************************************************************************
+ *  Copyright (c) 2010-2019 University of Southampton.
+ *  All rights reserved. This program and the accompanying materials
+ *  are made available under the terms of the Eclipse Public License v1.0
+ *  which accompanies this distribution, and is available at
+ *  http://www.eclipse.org/legal/epl-v10.html
+ *   
+ *  Contributors:
+ *  University of Southampton - Initial implementation
+ *******************************************************************************/
 package ac.soton.eventb.statemachines.generator.rules;
 
 import java.util.ArrayList;
@@ -49,7 +59,7 @@ public class Transition2InitActionsActiveRule extends AbstractEventBGeneratorRul
 		Transition sourceTransition = (Transition) sourceElement;
 
 		for(Event e : sourceTransition.getElaborates()){
-			if(e.getName().equals(Strings.INIT))
+			if(e.getName().equals(Utils.INITIALISATION_EVENT_NAME))
 				return true;
 		}
 		
@@ -87,7 +97,7 @@ public class Transition2InitActionsActiveRule extends AbstractEventBGeneratorRul
 	 */
 	private Event getInitEvent(Transition t){
 		for(Event e : t.getElaborates()){
-			if(e.getName().equals(Strings.INIT))
+			if(e.getName().equals(Utils.INITIALISATION_EVENT_NAME))
 				return e;
 		}
 		return null;

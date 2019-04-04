@@ -1,10 +1,19 @@
+/*******************************************************************************
+ *  Copyright (c) 2010-2019 University of Southampton.
+ *  All rights reserved. This program and the accompanying materials
+ *  are made available under the terms of the Eclipse Public License v1.0
+ *  which accompanies this distribution, and is available at
+ *  http://www.eclipse.org/legal/epl-v10.html
+ *   
+ *  Contributors:
+ *  University of Southampton - Initial implementation
+ *******************************************************************************/
 package ac.soton.eventb.statemachines.generator.varRules;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eventb.emf.core.EventBNamedCommentedComponentElement;
 import org.eventb.emf.core.context.Context;
 import org.eventb.emf.core.machine.Machine;
@@ -33,11 +42,11 @@ public class RemoveImplicitContextRule extends AbstractEventBGeneratorRule  impl
 	@Override
 	public List<TranslationDescriptor> fire(EObject sourceElement, List<TranslationDescriptor> generatedElements) throws Exception {
 		List<TranslationDescriptor> ret = new ArrayList<TranslationDescriptor>();
-		EventBNamedCommentedComponentElement container = (EventBNamedCommentedComponentElement)EcoreUtil.getRootContainer(sourceElement);
+		EventBNamedCommentedComponentElement container = Utils.getTranslationTarget();
 		
 		if(((Machine)container).getSees().size() != 0){
 			for(Context ctx : ((Machine)container).getSees()){
-				if(ctx.getName().equals(Strings.CTX_NAME((Statemachine)sourceElement))){
+				if(ctx.getName().equals(Strings.CTX_NAME(container, (Statemachine)sourceElement))){
 					//ret.add(Make.descriptor(Find.project(container), components, Make.context(container.getName() + Strings._IMPLICIT_CONTEXT,""), 1, true) );
 					//ret.add(Make.descriptor(container, sees,  ctx , 1, true));
 				}

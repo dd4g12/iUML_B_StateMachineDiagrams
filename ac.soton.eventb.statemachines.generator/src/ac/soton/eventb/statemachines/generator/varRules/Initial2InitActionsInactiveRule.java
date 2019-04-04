@@ -1,3 +1,13 @@
+/*******************************************************************************
+ *  Copyright (c) 2010-2019 University of Southampton.
+ *  All rights reserved. This program and the accompanying materials
+ *  are made available under the terms of the Eclipse Public License v1.0
+ *  which accompanies this distribution, and is available at
+ *  http://www.eclipse.org/legal/epl-v10.html
+ *   
+ *  Contributors:
+ *  University of Southampton - Initial implementation
+ *******************************************************************************/
 package ac.soton.eventb.statemachines.generator.varRules;
 
 import java.util.ArrayList;
@@ -6,10 +16,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eventb.emf.core.machine.Action;
 import org.eventb.emf.core.machine.Event;
-import org.eventb.emf.core.machine.Machine;
 
 import ac.soton.emf.translator.TranslationDescriptor;
 import ac.soton.emf.translator.configuration.IRule;
@@ -38,13 +46,10 @@ public class Initial2InitActionsInactiveRule extends AbstractEventBGeneratorRule
 	
 	@Override
 	public boolean enabled(EObject sourceElement) throws Exception{
-
-
-		Machine container = (Machine)EcoreUtil.getRootContainer(sourceElement);
-		return Utils.isRootStatemachine((Statemachine)sourceElement) &&
-				getInitEvent(container) != null &&
+		initEvent = Utils.getTargetInitialisationEvent();
+		rootSm = Utils.isRootStatemachine((Statemachine)sourceElement)? (Statemachine)sourceElement : null;
+		return 	rootSm != null && initEvent != null &&
 				((Statemachine)sourceElement).getTranslation().equals(TranslationKind.MULTIVAR);
-		
 	}
 
 
@@ -61,46 +66,19 @@ public class Initial2InitActionsInactiveRule extends AbstractEventBGeneratorRule
 	 */
 	@Override
 	public List<TranslationDescriptor> fire(EObject sourceElement, List<TranslationDescriptor> generatedElements) throws Exception {
-
 		this.generatedElements = generatedElements;
-		Machine container = (Machine)EcoreUtil.getRootContainer(sourceElement);
-		rootSm = (Statemachine) sourceElement;
-
 		List<TranslationDescriptor> ret = new ArrayList<TranslationDescriptor>();
 		
 		//Map that stores if the init action was generated or not
 		generatedStatus = new HashMap<State, Boolean>();
 		
-
-	  
-		initEvent = getInitEvent(container);
 		List<Action> generatedActions = (generateInactive(initEvent));
 
 		for(Action a : generatedActions){
 			ret.add(Make.descriptor(initEvent, actions, a, 10));
 		}
-
-
 		return ret;
-
 	}
-	
-	
-	
-	/**
-	 * Finds the init event
-	 * @param t
-	 * @return
-	 */
-	private Event getInitEvent(Machine m){
-		for(Event e : m.getEvents()){
-			if(e.getName().equals(Strings.INIT))
-				return e;
-		}
-		return null;
-	}
-
-
 
 	/**
 	 * Generate initialisations for all states to be initialised as inactive
@@ -131,19 +109,15 @@ public class Initial2InitActionsInactiveRule extends AbstractEventBGeneratorRule
 	private List<Action> state2initActionsInactive(State s, Event event){
 		List<Action> ret = new ArrayList<Action>();
 		String value;
-
 		if(rootSm.getInstances() == null)
 			value = Strings.B_FALSE;
 		else
 			value = Strings.B_EMPTYSET;
 		if(generatedStatus.get(s) == null && Find.generatedElement(generatedElements, initEvent, actions, Strings.INIT_ + s.getName()) == null)
 			ret.add(state2initAction(s, value));
-
 		for(Statemachine sm : s.getStatemachines()){
 			ret.addAll(statemachine2initActionsInactive(sm, event));
 		}
-
-
 		return ret;
 	}
 	

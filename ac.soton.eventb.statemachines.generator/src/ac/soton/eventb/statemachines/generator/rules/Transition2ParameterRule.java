@@ -1,3 +1,13 @@
+/*******************************************************************************
+ *  Copyright (c) 2010-2019 University of Southampton.
+ *  All rights reserved. This program and the accompanying materials
+ *  are made available under the terms of the Eclipse Public License v1.0
+ *  which accompanies this distribution, and is available at
+ *  http://www.eclipse.org/legal/epl-v10.html
+ *   
+ *  Contributors:
+ *  University of Southampton - Initial implementation
+ *******************************************************************************/
 package ac.soton.eventb.statemachines.generator.rules;
 
 import java.util.ArrayList;
@@ -13,7 +23,6 @@ import ac.soton.emf.translator.eventb.rules.AbstractEventBGeneratorRule;
 import ac.soton.emf.translator.eventb.utils.Make;
 import ac.soton.eventb.statemachines.Statemachine;
 import ac.soton.eventb.statemachines.Transition;
-import ac.soton.eventb.statemachines.generator.strings.Strings;
 import ac.soton.eventb.statemachines.generator.utils.Utils;
 
 
@@ -37,7 +46,7 @@ public class Transition2ParameterRule extends AbstractEventBGeneratorRule  imple
 		Transition sourceTransition = (Transition) sourceElement;
 		
 		for(Event ev : sourceTransition.getElaborates()){
-			if(!ev.getName().equals(Strings.INIT)){
+			if(!ev.getName().equals(Utils.INITIALISATION_EVENT_NAME)){
 				List<Parameter> generatedParameters = generateParameters(sourceTransition, ev);
 				for(Parameter p : generatedParameters){
 					ret.add(Make.descriptor(ev, parameters, Make.parameter(p.getName(), p.getComment()), 10));

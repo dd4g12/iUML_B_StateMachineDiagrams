@@ -1,3 +1,14 @@
+/*******************************************************************************
+ *  Copyright (c) 2010-2019 University of Southampton.
+ *  All rights reserved. This program and the accompanying materials
+ *  are made available under the terms of the Eclipse Public License v1.0
+ *  which accompanies this distribution, and is available at
+ *  http://www.eclipse.org/legal/epl-v10.html
+ *   
+ *  Contributors:
+ *  University of Southampton - Initial implementation
+ *******************************************************************************/
+
 package ac.soton.eventb.statemachines.generator.utils;
 
 import java.util.ArrayList;
@@ -21,14 +32,13 @@ import ac.soton.eventb.statemachines.Statemachine;
 import ac.soton.eventb.statemachines.Transition;
 import ac.soton.eventb.statemachines.generator.strings.Strings;
 
-public class Utils {
-	private Utils(){
+public class Utils extends ac.soton.emf.translator.eventb.utils.Utils {
+
+	protected Utils(){
 		//DO NOT INSTANTIATE
 	}
 	
-	
-	
-	
+
 	/**
 	 * Returns state's root level statemachine.
 	 * @param abs
@@ -321,7 +331,7 @@ public class Utils {
 			if(abs instanceof Initial)
 				for(Transition t :  ((Initial) abs).getOutgoing())
 					for(Event e : t.getElaborates())
-						if(e.getName().equals(Strings.INIT))
+						if(e.getName().equals(Utils.INITIALISATION_EVENT_NAME ))
 							return (State) t.getTarget();
 		}
 	

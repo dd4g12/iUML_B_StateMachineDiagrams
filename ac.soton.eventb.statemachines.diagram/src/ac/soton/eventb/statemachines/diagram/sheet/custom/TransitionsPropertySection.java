@@ -1,10 +1,14 @@
-/*
- * Copyright (c) 2014 University of Southampton.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- */
+/*******************************************************************************
+ *  Copyright (c) 2014-2019 University of Southampton.
+ *  All rights reserved. This program and the accompanying materials
+ *  are made available under the terms of the Eclipse Public License v1.0
+ *  which accompanies this distribution, and is available at
+ *  http://www.eclipse.org/legal/epl-v10.html
+ *   
+ *  Contributors:
+ *  University of Southampton - Initial implementation
+ *******************************************************************************/
+
 package ac.soton.eventb.statemachines.diagram.sheet.custom;
 
 import org.eclipse.emf.ecore.EReference;
@@ -46,7 +50,9 @@ public class TransitionsPropertySection extends AbstractEditTableWithDefaultNami
 		switch (col) {
 		case 0 : return CoreextensionPackage.Literals.EVENT_BLABELED__LABEL;
 		case 1 : return CoreextensionPackage.Literals.EVENT_BEVENT_GROUP__EXTENDED;
-		case 2 : return CorePackage.Literals.EVENT_BCOMMENTED__COMMENT;
+		case 2 : return StatemachinesPackage.Literals.TRANSITION__SOURCE;
+		case 3 : return StatemachinesPackage.Literals.TRANSITION__TARGET;
+		case 4 : return CorePackage.Literals.EVENT_BCOMMENTED__COMMENT;
 		default : return null;
 		}
 	}
@@ -56,7 +62,9 @@ public class TransitionsPropertySection extends AbstractEditTableWithDefaultNami
 		switch (col) {
 		case 0 : return false;	//name
 		case 1 : return false;	//extended field
-		case 2 : return true;	//comment field
+		case 2 : return false;	//source field
+		case 3 : return false;	//target field
+		case 4 : return true;	//comment field
 		default : return false;	//unknown
 		}
 	}
@@ -65,8 +73,10 @@ public class TransitionsPropertySection extends AbstractEditTableWithDefaultNami
 	protected int columnWidth(final int col){
 		switch (col) {
 		case 0 : return 250;	//name
-		case 1 : return 80;	//extended field
-		case 2 : return 400;	//comment field
+		case 1 : return 80;		//extended field
+		case 2 : return 80;		//source field
+		case 3 : return 80;		//target field
+		case 4 : return 400;	//comment field
 		default : return -1;	//unknown
 		}
 	}

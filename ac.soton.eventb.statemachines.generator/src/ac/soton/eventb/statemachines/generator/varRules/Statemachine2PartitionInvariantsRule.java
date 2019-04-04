@@ -1,12 +1,21 @@
+/*******************************************************************************
+ *  Copyright (c) 2010-2019 University of Southampton.
+ *  All rights reserved. This program and the accompanying materials
+ *  are made available under the terms of the Eclipse Public License v1.0
+ *  which accompanies this distribution, and is available at
+ *  http://www.eclipse.org/legal/epl-v10.html
+ *   
+ *  Contributors:
+ *  University of Southampton - Initial implementation
+ *******************************************************************************/
 package ac.soton.eventb.statemachines.generator.varRules;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eventb.emf.core.EventBNamedCommentedComponentElement;
 import org.eventb.emf.core.machine.Invariant;
+import org.eventb.emf.core.machine.Machine;
 
 import ac.soton.emf.translator.TranslationDescriptor;
 import ac.soton.emf.translator.configuration.IRule;
@@ -26,14 +35,11 @@ public class Statemachine2PartitionInvariantsRule extends AbstractEventBGenerato
 		int numberOfStates = 0;
 		Statemachine sourceSm = (Statemachine) sourceElement;
 		//Only enabled for Variables Translation
-		if(!Utils.getRootStatemachine(sourceSm).getTranslation().equals(TranslationKind.MULTIVAR))
-			return false;
-		
+		if(!Utils.getRootStatemachine(sourceSm).getTranslation().equals(TranslationKind.MULTIVAR)) return false;
 		for(AbstractNode abs : sourceSm.getNodes()){
 			if(abs instanceof State)
 				numberOfStates++;
 		}
-		
 		return sourceSm.getRefines() == null && numberOfStates > 1;
 	}
 	
@@ -46,20 +52,16 @@ public class Statemachine2PartitionInvariantsRule extends AbstractEventBGenerato
 	@Override
 	public List<TranslationDescriptor> fire(EObject sourceElement, List<TranslationDescriptor> generatedElements) throws Exception {
 		List<TranslationDescriptor> ret = new ArrayList<TranslationDescriptor>();
-		EventBNamedCommentedComponentElement container = (EventBNamedCommentedComponentElement)EcoreUtil.getRootContainer(sourceElement);
+		Machine machine = (Machine) Utils.getTranslationTarget();;
 		Statemachine sourceSm = (Statemachine) sourceElement;
-		
-		
 		int priority = 2;
-		
 		if(Utils.isRootStatemachine(sourceSm)){
-				ret.add(Make.descriptor(container, invariants, partitionInv4RootSM(sourceSm), priority));
+				ret.add(Make.descriptor(machine, invariants, partitionInv4RootSM(sourceSm), priority));
 		}
 		else{
-				ret.add(Make.descriptor(container, invariants, partitionInv4NestedSM(sourceSm), priority));
+				ret.add(Make.descriptor(machine, invariants, partitionInv4NestedSM(sourceSm), priority));
 		}
 		return ret;
-		
 	}
 	
 	/**
@@ -71,8 +73,6 @@ public class Statemachine2PartitionInvariantsRule extends AbstractEventBGenerato
 		return Make.invariant(Strings.DISTINCT_STATES_IN_ + sm.getName(),
 				getStatePartitionAnticedent4RootSM(sm) + "partition" + getStatePartitionContent(sm), 
 				"");
-		
-		
 	}
 	
 	private Invariant partitionInv4NestedSM(Statemachine sm){
