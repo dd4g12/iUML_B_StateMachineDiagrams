@@ -1,12 +1,21 @@
+/*******************************************************************************
+ *  Copyright (c) 2010-2019 University of Southampton.
+ *  All rights reserved. This program and the accompanying materials
+ *  are made available under the terms of the Eclipse Public License v1.0
+ *  which accompanies this distribution, and is available at
+ *  http://www.eclipse.org/legal/epl-v10.html
+ *   
+ *  Contributors:
+ *  University of Southampton - Initial implementation
+ *******************************************************************************/
 package ac.soton.eventb.statemachines.generator.varRules;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eventb.emf.core.EventBNamedCommentedComponentElement;
 import org.eventb.emf.core.machine.Invariant;
+import org.eventb.emf.core.machine.Machine;
 
 import ac.soton.emf.translator.TranslationDescriptor;
 import ac.soton.emf.translator.configuration.IRule;
@@ -30,7 +39,6 @@ public class State2TypingInvariantsRule extends AbstractEventBGeneratorRule  imp
 				Utils.getRootStatemachine(sourceState).getInstances() == null; //If it is not a state from the root statemachine
 	}
 	
-	
 	/**
 	 * Generates a new variable named as the states it represents
 	 */
@@ -38,22 +46,10 @@ public class State2TypingInvariantsRule extends AbstractEventBGeneratorRule  imp
 	public List<TranslationDescriptor> fire(EObject sourceElement, List<TranslationDescriptor> generatedElements) throws Exception {
 		List<TranslationDescriptor> ret = new ArrayList<TranslationDescriptor>();
 		State sourceState = (State) sourceElement;
-		EventBNamedCommentedComponentElement container = (EventBNamedCommentedComponentElement)EcoreUtil.getRootContainer(sourceState);
-	
-		Invariant newInvariant = Make.invariant(Strings.TYPEOF_ + sourceState.getName(), generatePredicate(sourceState), "");
-		
-		ret.add(Make.descriptor(container, invariants, newInvariant, 1));
+		Machine machine = (Machine) Utils.getTranslationTarget();;
+		Invariant newInvariant = Make.invariant(Strings.TYPEOF_ + sourceState.getName(), sourceState.getName()+Strings.B_IN+Strings.B_BOOL, "");
+		ret.add(Make.descriptor(machine, invariants, newInvariant, 1));
 		return ret;
 	}
-	/**
-	 * Calculates the predicate needed for the given State
-	 * 
-	 * @param sourceState
-	 * @return
-	 */
-	private String generatePredicate (State sourceState){
 
-			return sourceState.getName() + Strings.B_IN + Strings.B_BOOL;
-
-	}
 }

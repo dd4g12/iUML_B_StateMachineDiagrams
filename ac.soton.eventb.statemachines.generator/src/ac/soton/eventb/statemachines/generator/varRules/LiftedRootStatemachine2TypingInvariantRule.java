@@ -1,10 +1,19 @@
+/*******************************************************************************
+ *  Copyright (c) 2010-2019 University of Southampton.
+ *  All rights reserved. This program and the accompanying materials
+ *  are made available under the terms of the Eclipse Public License v1.0
+ *  which accompanies this distribution, and is available at
+ *  http://www.eclipse.org/legal/epl-v10.html
+ *   
+ *  Contributors:
+ *  University of Southampton - Initial implementation
+ *******************************************************************************/
 package ac.soton.eventb.statemachines.generator.varRules;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eventb.emf.core.EventBNamedCommentedComponentElement;
 import org.eventb.emf.core.machine.Invariant;
 
@@ -41,11 +50,9 @@ public class LiftedRootStatemachine2TypingInvariantRule extends AbstractEventBGe
 		List<TranslationDescriptor> ret = new ArrayList<TranslationDescriptor>();
 		Statemachine rootSM = (Statemachine) sourceElement;
 		
-		EventBNamedCommentedComponentElement container = (EventBNamedCommentedComponentElement)EcoreUtil.getRootContainer(rootSM);
+		EventBNamedCommentedComponentElement container = Utils.getTranslationTarget();
 	
 		List<Invariant> newInvariants = statemachine2typeInvariant(rootSM);
-		
-		
 		for(Invariant inv : newInvariants){
 			ret.add(Make.descriptor(container, invariants, inv, 1));
 		}

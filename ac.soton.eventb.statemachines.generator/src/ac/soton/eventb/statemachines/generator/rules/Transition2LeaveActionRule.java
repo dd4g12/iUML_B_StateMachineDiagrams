@@ -1,3 +1,13 @@
+/*******************************************************************************
+ *  Copyright (c) 2010-2019 University of Southampton.
+ *  All rights reserved. This program and the accompanying materials
+ *  are made available under the terms of the Eclipse Public License v1.0
+ *  which accompanies this distribution, and is available at
+ *  http://www.eclipse.org/legal/epl-v10.html
+ *   
+ *  Contributors:
+ *  University of Southampton - Initial implementation
+ *******************************************************************************/
 package ac.soton.eventb.statemachines.generator.rules;
 
 import java.util.ArrayList;
@@ -62,7 +72,7 @@ public class Transition2LeaveActionRule extends AbstractEventBGeneratorRule  imp
 
 		for(Event ev : sourceTransition.getElaborates()){
 			generatedActions.clear();
-			if(!ev.getName().equals(Strings.INIT)){
+			if(!ev.getName().equals(Utils.INITIALISATION_EVENT_NAME)){
 				generatedActions.addAll(generateLeaveActionsFromNode(sourceTransition.getSource(), sourceTransition, ev));
 			}
 			for(Action a : generatedActions){
