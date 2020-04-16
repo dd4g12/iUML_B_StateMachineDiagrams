@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 University of Southampton.
+ * Copyright (c) 2014-2019 University of Southampton.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -13,11 +13,10 @@ import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eventb.emf.core.machine.Machine;
 
 import ac.soton.eventb.emf.diagrams.sheet.AbstractEnumerationPropertySection;
 import ac.soton.eventb.statemachines.State;
+import ac.soton.eventb.statemachines.Statemachine;
 import ac.soton.eventb.statemachines.StatemachinesPackage;
 
 /**
@@ -63,15 +62,20 @@ public class RefinesStatePropertySection extends AbstractEnumerationPropertySect
 	
 	@SuppressWarnings("unchecked")
 	private EList<EObject> getStatesToRefine(){
-		EObject container = EcoreUtil.getRootContainer(eObject);
-		if (container instanceof Machine) {
-			Machine machine = (Machine) container;
-			EList<Machine> abstractMachines = machine.getRefines();
-			if (abstractMachines.size() > 0) {
-				return abstractMachines.get(0).getAllContained(StatemachinesPackage.Literals.STATE, true);
-			}
+		Statemachine rootStatemachine = getRootSM();
+		Statemachine refinedStatemachine = rootStatemachine.getRefines();
+		if (refinedStatemachine!= null) {
+			return refinedStatemachine.getAllContained(StatemachinesPackage.Literals.STATE, true);
 		}
 		return (EList<EObject>) ECollections.EMPTY_ELIST;
+	}
+
+	private Statemachine getRootSM() {
+		Statemachine rootStatemachine = (Statemachine)owner.eContainer();
+		while (rootStatemachine.eContainer() instanceof State
+				&& rootStatemachine.eContainer().eContainer() instanceof Statemachine)
+			rootStatemachine = (Statemachine) rootStatemachine.eContainer().eContainer();
+		return rootStatemachine;
 	}
 	
 }

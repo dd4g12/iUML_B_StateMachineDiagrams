@@ -11,11 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eventb.emf.core.CorePackage;
-import org.eventb.emf.core.EventBElement;
 import org.eventb.emf.core.EventBNamed;
 import org.eventb.emf.core.EventBNamedCommentedComponentElement;
 import org.eventb.emf.core.EventBNamedCommentedElement;
+import org.eventb.emf.core.EventBObject;
 import org.eventb.emf.core.context.Context;
 import org.eventb.emf.core.machine.Machine;
 
@@ -63,7 +62,11 @@ public class InstancesPropertySection extends AbstractEnumerationPropertySection
 
 	@Override
 	protected List<Object> getAvailableDataElements(){
-		EventBNamedCommentedComponentElement container = (EventBNamedCommentedComponentElement)((EventBElement)eObject).getContaining(CorePackage.Literals.EVENT_BNAMED_COMMENTED_COMPONENT_ELEMENT);
+		EventBObject target = getTranslationTarget();
+		EventBNamedCommentedComponentElement container = 
+				target instanceof EventBNamedCommentedComponentElement? 
+						(EventBNamedCommentedComponentElement)target : 
+						null;
 		// find all data elements in scope
 		List<Object> values = getAvailableDataElements(container);
 		values.add(0, null);
