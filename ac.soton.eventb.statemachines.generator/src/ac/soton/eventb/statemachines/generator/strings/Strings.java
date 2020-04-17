@@ -1,8 +1,18 @@
+/*******************************************************************************
+ *  Copyright (c) 2010-2019 University of Southampton.
+ *  All rights reserved. This program and the accompanying materials
+ *  are made available under the terms of the Eclipse Public License v1.0
+ *  which accompanies this distribution, and is available at
+ *  http://www.eclipse.org/legal/epl-v10.html
+ *   
+ *  Contributors:
+ *  University of Southampton - Initial implementation
+ *******************************************************************************/
+
 package ac.soton.eventb.statemachines.generator.strings;
 
 import java.text.MessageFormat;
 
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eventb.emf.core.EventBNamedCommentedComponentElement;
 
 import ac.soton.eventb.statemachines.Statemachine;
@@ -25,9 +35,6 @@ public class Strings {
 
 	// generator id key
 	public static String GENERATOR_ID_KEY   = "org.eventb.emf.persistence.generator_ID";
-
-	// initialisation event name
-	public static String INIT   = "INITIALISATION";
 
 	// math
 	public static String B_EQ   = " = ";
@@ -84,9 +91,9 @@ public class Strings {
 	//auxiliary methods
 	// context name
 	private static String CTXT_NAME   = "{0}_Statemachine_{1}";
-	public static String CTX_NAME(Statemachine rootStatemachine){
+	public static String CTX_NAME(EventBNamedCommentedComponentElement component, Statemachine rootStatemachine){
 		return bind(CTXT_NAME, 
-				((EventBNamedCommentedComponentElement)EcoreUtil.getRootContainer(rootStatemachine)).getName(),
+				component.getName(),
 				rootStatemachine.getName());
 	}
 

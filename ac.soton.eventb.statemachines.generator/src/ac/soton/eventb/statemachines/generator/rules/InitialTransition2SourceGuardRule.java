@@ -1,3 +1,13 @@
+/*******************************************************************************
+ *  Copyright (c) 2010-2019 University of Southampton.
+ *  All rights reserved. This program and the accompanying materials
+ *  are made available under the terms of the Eclipse Public License v1.0
+ *  which accompanies this distribution, and is available at
+ *  http://www.eclipse.org/legal/epl-v10.html
+ *   
+ *  Contributors:
+ *  University of Southampton - Initial implementation
+ *******************************************************************************/
 package ac.soton.eventb.statemachines.generator.rules;
 
 import java.util.ArrayList;
@@ -58,7 +68,7 @@ public class InitialTransition2SourceGuardRule extends AbstractEventBGeneratorRu
 		Guard grd = (Guard) Make.guard(name, predicate);
 		
 		for(Event e : sourceTransition.getElaborates()){
-			if(!e.getName().equals(Strings.INIT))
+			if(!e.getName().equals(Utils.INITIALISATION_EVENT_NAME))
 				ret.add(Make.descriptor(e, guards, Make.guard(grd.getName(), grd.isTheorem(), grd.getPredicate(), grd.getComment()), 10));
 		}
 		

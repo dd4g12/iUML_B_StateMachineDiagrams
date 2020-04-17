@@ -1,13 +1,21 @@
+/*******************************************************************************
+ *  Copyright (c) 2010-2019 University of Southampton.
+ *  All rights reserved. This program and the accompanying materials
+ *  are made available under the terms of the Eclipse Public License v1.0
+ *  which accompanies this distribution, and is available at
+ *  http://www.eclipse.org/legal/epl-v10.html
+ *   
+ *  Contributors:
+ *  University of Southampton - Initial implementation
+ *******************************************************************************/
 package ac.soton.eventb.statemachines.generator.enumRules;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eventb.emf.core.machine.Action;
 import org.eventb.emf.core.machine.Event;
-import org.eventb.emf.core.machine.Machine;
 
 import ac.soton.emf.translator.TranslationDescriptor;
 import ac.soton.emf.translator.configuration.IRule;
@@ -29,19 +37,16 @@ import ac.soton.eventb.statemachines.generator.utils.Utils;
  */
 public class Transition2InitActionsInactiveRule extends AbstractEventBGeneratorRule  implements IRule {
 
-	
+	private List<TranslationDescriptor> generatedElements;
 	private Statemachine rootSM;
 	private Event initEvent;
-	private List<TranslationDescriptor> generatedElements;
 	
 	@Override
 	public boolean enabled(EObject sourceElement) throws Exception{
-
-		Machine container = (Machine)EcoreUtil.getRootContainer(sourceElement);
-		return Utils.isRootStatemachine((Statemachine)sourceElement) &&
-				getInitEvent(container) != null &&
+		initEvent = Utils.getTargetInitialisationEvent();
+		rootSM = Utils.isRootStatemachine((Statemachine)sourceElement)? (Statemachine)sourceElement : null;
+		return 	rootSM != null && initEvent != null &&
 				((Statemachine)sourceElement).getTranslation().equals(TranslationKind.SINGLEVAR);
-		
 	}
 	
 	@Override
@@ -55,20 +60,11 @@ public class Transition2InitActionsInactiveRule extends AbstractEventBGeneratorR
 	public List<TranslationDescriptor> fire(EObject sourceElement, List<TranslationDescriptor> generatedElements) throws Exception {
 		List<TranslationDescriptor> ret = new ArrayList<TranslationDescriptor>();
 		List<Action> generatedActions = new ArrayList<Action>();
-		rootSM = (Statemachine) sourceElement;
-		
 		this.generatedElements = generatedElements;
-		Machine container = (Machine)EcoreUtil.getRootContainer(sourceElement);
-		initEvent = getInitEvent(container); 
-				
-		
 		generatedActions.addAll(statemachine2initActionsInactive(rootSM));
-		
-		
 		for(Action a : generatedActions){
 			ret.add(Make.descriptor(initEvent, actions, a, 1));
 		}
-		
 		return ret;
 	}
 	
@@ -82,9 +78,6 @@ public class Transition2InitActionsInactiveRule extends AbstractEventBGeneratorR
 				for(Statemachine ism : ((State)node).getStatemachines())
 					ret.addAll(statemachine2initActionsInactive(ism));
 		}
-		
-		
-		
 		return ret;
 	}
 
@@ -101,22 +94,9 @@ public class Transition2InitActionsInactiveRule extends AbstractEventBGeneratorR
 		return (Action) Make.action(name, expression);
 	}
 
-	/**
-	 * Finds the init event
-	 * @param t
-	 * @return
-	 */
-	private Event getInitEvent(Machine m){
-		for(Event e : m.getEvents()){
-			if(e.getName().equals(Strings.INIT))
-				return e;
-		}
-		return null;
-	}
 	
 	private boolean canGenerate(Statemachine sm){
 		return 	Find.generatedElement(generatedElements, initEvent, actions, Strings.INIT_ + sm.getName()) == null;
-	
 	}
 }
 
