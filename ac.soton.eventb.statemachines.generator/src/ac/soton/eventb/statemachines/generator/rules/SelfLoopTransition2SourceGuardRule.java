@@ -59,10 +59,9 @@ public class SelfLoopTransition2SourceGuardRule extends AbstractEventBGeneratorR
 		String name = Strings.ISIN_ + sourceState.getName();
 		String predicate = generatePredicate(sourceState);
 		
-		Guard grd = (Guard) Make.guard(name, predicate);
-		
 		for(Event e : sourceTransition.getElaborates()){
-			ret.add(Make.descriptor(e, guards, Make.guard(grd.getName(), grd.isTheorem(), grd.getPredicate(),grd.getComment()), 10));
+//			ret.add(Make.descriptor(e, guards, Make.guard(grd.getName(), grd.isTheorem(), grd.getPredicate(),grd.getComment()), 10));
+			ret.add(Make.descriptor(e, guards, Make.guard(name, predicate), 10));
 			
 		}
 		
